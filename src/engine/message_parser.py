@@ -1,7 +1,7 @@
 import json
 import re
 
-from consts import events as consts
+from src.consts import events as consts
 
 
 class MessageParser:

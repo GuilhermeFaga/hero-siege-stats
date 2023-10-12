@@ -1,6 +1,6 @@
-from engine.message_parser import MessageParser
-from engine.game_stats import GameStats
-from engine.backend import Backend
+from src.engine.message_parser import MessageParser
+from src.engine.game_stats import GameStats
+from src.engine.backend import Backend
 
 
 game_stats = GameStats()

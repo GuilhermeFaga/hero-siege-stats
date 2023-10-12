@@ -1,8 +1,8 @@
-from models.messages.gold import GoldMessage
-from models.messages.xp import XPMessage
-from models.messages.mail import MailMessage
-from models.messages.added_item import AddedItemMessage
-from models.messages.satanic_zone import SatanicZoneMessage
+from src.models.messages.gold import GoldMessage
+from src.models.messages.xp import XPMessage
+from src.models.messages.mail import MailMessage
+from src.models.messages.added_item import AddedItemMessage
+from src.models.messages.satanic_zone import SatanicZoneMessage
 
 
 EvNameUpdateGold: str = 'UpdateGold'
