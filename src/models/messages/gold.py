@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from src.models.messages.base import BaseMessage
+
 
 class CurrencyData:
     account_id: int
@@ -18,12 +20,9 @@ class CurrencyData:
         self.GNH = currencyData['GNH']
 
 
-class GoldMessage:
-    status: str
-    message: str
+class GoldMessage(BaseMessage):
     currency_data: CurrencyData
 
     def __init__(self, msg_dict: dict):
-        self.status = msg_dict['status']
-        self.message = msg_dict['message']
+        super().__init__(msg_dict)
         self.currency_data = CurrencyData(msg_dict['currencyData'])
