@@ -6,9 +6,10 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.11,<3.12"
 scapy = "^2.5.0"
 pyshark = "^0.6"
+pyside6 = "^6.5.3"
 
 
 [build-system]

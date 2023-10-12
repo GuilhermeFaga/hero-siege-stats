@@ -147,6 +147,57 @@ packaging = "*"
 termcolor = "*"
 
 [[package]]
+name = "pyside6"
+version = "6.5.3"
+description = "Python bindings for the Qt cross-platform application and UI framework"
+optional = false
+python-versions = "<3.12,>=3.7"
+files = [
+    {file = "PySide6-6.5.3-cp37-abi3-macosx_11_0_universal2.whl", hash = "sha256:be53e7c64710fc4307afd33147e241a06cd97b18fae887ee611d8d4b373dbb04"},
+    {file = "PySide6-6.5.3-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:84f3d3e278e5ea00f1558ac7e1eeb382bba1df7732bdb025ee654e7b4b3cd451"},
+    {file = "PySide6-6.5.3-cp37-abi3-manylinux_2_31_aarch64.whl", hash = "sha256:48f4579ca49225cfff8f512178551bdf6aa9031198527f71799bcc061a0f2327"},
+    {file = "PySide6-6.5.3-cp37-abi3-win_amd64.whl", hash = "sha256:aaaf5acfaaf9575740df03ee1aa706e2f38d8fcca2255acbbd3a5701f6f2f416"},
+]
+
+[package.dependencies]
+PySide6-Addons = "6.5.3"
+PySide6-Essentials = "6.5.3"
+shiboken6 = "6.5.3"
+
+[[package]]
+name = "pyside6-addons"
+version = "6.5.3"
+description = "Python bindings for the Qt cross-platform application and UI framework (Addons)"
+optional = false
+python-versions = "<3.12,>=3.7"
+files = [
+    {file = "PySide6_Addons-6.5.3-cp37-abi3-macosx_11_0_universal2.whl", hash = "sha256:047162b158ee929d43c21cdc3ac48e75fec612f2e5492b317190fac98d2de5c6"},
+    {file = "PySide6_Addons-6.5.3-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:e5bc1fa95351182dc2c003e07320d5509218ccc0840d10197d7d452aa5de5d2e"},
+    {file = "PySide6_Addons-6.5.3-cp37-abi3-manylinux_2_31_aarch64.whl", hash = "sha256:be0dcfb15d44c2973c3c122058f1df8c3c9d93abd4170534e06dbf986aa30e26"},
+    {file = "PySide6_Addons-6.5.3-cp37-abi3-win_amd64.whl", hash = "sha256:dd1d294d48798bd297bde02d3ea02f313a86e38ed3944519228466bdfb537961"},
+]
+
+[package.dependencies]
+PySide6-Essentials = "6.5.3"
+shiboken6 = "6.5.3"
+
+[[package]]
+name = "pyside6-essentials"
+version = "6.5.3"
+description = "Python bindings for the Qt cross-platform application and UI framework (Essentials)"
+optional = false
+python-versions = "<3.12,>=3.7"
+files = [
+    {file = "PySide6_Essentials-6.5.3-cp37-abi3-macosx_11_0_universal2.whl", hash = "sha256:4d9c95ded938e557052fc67efe68d57108856df141a1b499497fd7999419e3eb"},
+    {file = "PySide6_Essentials-6.5.3-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:45580138be91f5fdcefb4d28dadb56d3640eb658575af97b49057e10c22a024d"},
+    {file = "PySide6_Essentials-6.5.3-cp37-abi3-manylinux_2_31_aarch64.whl", hash = "sha256:8244bc185b0243ba7c4491033e592b247e44a63d69213e9a45ee38e87e0f1f90"},
+    {file = "PySide6_Essentials-6.5.3-cp37-abi3-win_amd64.whl", hash = "sha256:f928b98ec349c87f9ccc63a482917779f59fa646893722c53c2fe2a1e4f335e0"},
+]
+
+[package.dependencies]
+shiboken6 = "6.5.3"
+
+[[package]]
 name = "scapy"
 version = "2.5.0"
 description = "Scapy: interactive packet manipulation tool"
@@ -160,6 +211,19 @@ files = [
 basic = ["ipython"]
 complete = ["cryptography (>=2.0)", "ipython", "matplotlib", "pyx"]
 docs = ["sphinx (>=3.0.0)", "sphinx_rtd_theme (>=0.4.3)", "tox (>=3.0.0)"]
+
+[[package]]
+name = "shiboken6"
+version = "6.5.3"
+description = "Python/C++ bindings helper module"
+optional = false
+python-versions = "<3.12,>=3.7"
+files = [
+    {file = "shiboken6-6.5.3-cp37-abi3-macosx_11_0_universal2.whl", hash = "sha256:faaca92dcbbf26c0ae13f189746c38482e40859e0897b0ed4dee5e04f69fda71"},
+    {file = "shiboken6-6.5.3-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:4cdda98df511243c40f1dd4d9eac25a7191c2583ac673147ecdae0ffa3b9223f"},
+    {file = "shiboken6-6.5.3-cp37-abi3-manylinux_2_31_aarch64.whl", hash = "sha256:1bc928ca9f1c1d16ff8fe0585627738a15552bb3329c04fca2c74a443618a6b3"},
+    {file = "shiboken6-6.5.3-cp37-abi3-win_amd64.whl", hash = "sha256:a013367e38a12b3f69ba02e79f133df4fba8d21b55a78c6999cdb31c25609524"},
+]
 
 [[package]]
 name = "termcolor"
@@ -177,5 +241,5 @@ tests = ["pytest", "pytest-cov"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.12"
-content-hash = "90c43f66abf73b1aa6f21beb730b1bd26c75213101e08b6cf4476d6669e9a7e9"
+python-versions = ">=3.11,<3.12"
+content-hash = "4625fef4c31e214f831002bf6993bbe53c435e641a00c1858415dd2ec01c006d"
