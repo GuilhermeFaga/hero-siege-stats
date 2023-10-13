@@ -1,8 +1,13 @@
 import json
 import re
 
+from src.models.events.gold import GoldEvent
+from src.models.events.xp import XPEvent
+
+from src.models.messages.gold import GoldMessage
+from src.models.messages.xp import XPMessage
+
 from src.consts import events as consts
-from src.models.event import Event
 
 
 class MessageParser:
@@ -29,7 +34,10 @@ class MessageParser:
         if event_name is None or msg_dict is None:
             return None
 
-        return Event(event_name, consts.EvValues[event_name](msg_dict))
+        if event_name == consts.EvNameUpdateGold:
+            return GoldEvent(GoldMessage(msg_dict))
+        if event_name == consts.EvNameUpdateXP:
+            return XPEvent(XPMessage(msg_dict))
 
     @staticmethod
     def identify_event(msg_dict: dict):

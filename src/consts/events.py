@@ -15,11 +15,3 @@ EvNameUpdateSatanicZone: str = 'UpdateSatanicZone'
 
 EvKeyName: str = 'name'
 EvKeyValue: str = 'value'
-
-
-EvValues: dict[str, Callable] = {
-    EvNameUpdateGold: lambda msg: GoldMessage(msg).currency_data,
-    EvNameUpdateXP: lambda msg: XPMessage(msg).xp,
-    EvNameUpdateMail: lambda msg: MailMessage(msg).new_mail,
-    EvNameItemAdded: lambda msg: AddedItemMessage(msg).addedItemObject,
-}

@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QLabel
 from src.gui.components.row import Row
 from src.models.stats.stats import Stats
 from src.models.stats.gold import GoldStats
+from src.models.stats.xp import XPStats
 
 from src.engine import Engine
 
@@ -20,9 +21,21 @@ class GoldRow(Row):
             self.total_gold_earned_label
         ])
 
-    def update(self, gold: GoldStats):
-        self.total_gold_label.setText(str(gold.total_gold))
-        self.total_gold_earned_label.setText(str(gold.total_gold_earned))
+    def update(self, gold_stats: GoldStats):
+        self.total_gold_label.setText(str(gold_stats.total_gold))
+        self.total_gold_earned_label.setText(str(gold_stats.total_gold_earned))
+
+
+class XPRow(Row):
+    def __init__(self):
+        self.total_xp_earned_label = QLabel(str(0))
+        Row.__init__(self, [
+            QLabel("XP earned:"),
+            self.total_xp_earned_label
+        ])
+
+    def update(self, xp_stats: XPStats):
+        self.total_xp_earned_label.setText(str(xp_stats.total_xp_earned))
 
 
 class StatsLayout(QWidget):
@@ -32,10 +45,14 @@ class StatsLayout(QWidget):
         self.setLayout(QVBoxLayout())
 
         self.gold_row = GoldRow()
+        self.xp_row = XPRow()
+
         self.layout().addWidget(self.gold_row)
+        self.layout().addWidget(self.xp_row)
 
     def update(self, stats: Stats):
         self.gold_row.update(stats.gold)
+        self.xp_row.update(stats.xp)
 
     def refresh(self):
         stats = Engine.get_stats()

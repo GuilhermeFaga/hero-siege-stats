@@ -1,4 +1,3 @@
-
 from src.models.messages.gold import CurrencyData
 
 
@@ -17,3 +16,4 @@ class GoldStats:
             diff = currency_data.gold - self.total_gold
             self.total_gold_earned += diff if diff > 0 else 0
         self.total_gold = currency_data.gold
+        # TODO - calculate gold per hour
