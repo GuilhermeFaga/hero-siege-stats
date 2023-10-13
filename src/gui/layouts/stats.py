@@ -11,14 +11,18 @@ from src.engine import Engine
 
 class GoldRow(Row):
     def __init__(self):
-        self.gold_label = QLabel(str(0))
+        self.total_gold_label = QLabel(str(0))
+        self.total_gold_earned_label = QLabel(str(0))
         Row.__init__(self, [
             QLabel("Gold:"),
-            self.gold_label
+            self.total_gold_label,
+            QLabel("Gold earned:"),
+            self.total_gold_earned_label
         ])
 
     def update(self, gold: GoldStats):
-        self.gold_label.setText(str(gold.total_gold))
+        self.total_gold_label.setText(str(gold.total_gold))
+        self.total_gold_earned_label.setText(str(gold.total_gold_earned))
 
 
 class StatsLayout(QWidget):
