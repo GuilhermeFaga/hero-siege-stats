@@ -9,7 +9,7 @@ class Backend:
         # TODO - Find the correct game server IP
         sniffer = AsyncSniffer(
             iface="Wi-Fi",
-            filter="src host 104.200.17.141 and len > 70",
+            filter="host 104.200.17.141 and len > 70",
             prn=packet_callback,
             store=False
         )
