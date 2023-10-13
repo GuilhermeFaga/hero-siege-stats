@@ -8,8 +8,7 @@ class Engine:
 
     @staticmethod
     def get_stats():
-        t = Engine.game_stats.get_test()
-        return (t)
+        return Engine.game_stats.get_stats()
 
     @staticmethod
     def queue_an_event(packet):

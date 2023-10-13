@@ -18,7 +18,7 @@ def run():
 
     geometry = app.screens()[0].size()
 
-    widget = MainWidget(Engine)
+    widget = MainWidget()
     widget.resize(WIDTH, HEIGHT)
     widget.move(0, geometry.height() - HEIGHT - 280)
 

@@ -1,3 +1,5 @@
+from typing import Callable
+
 from src.models.messages.gold import GoldMessage
 from src.models.messages.xp import XPMessage
 from src.models.messages.mail import MailMessage
@@ -15,7 +17,7 @@ EvKeyName: str = 'name'
 EvKeyValue: str = 'value'
 
 
-EvValues: dict = {
+EvValues: dict[str, Callable] = {
     EvNameUpdateGold: lambda msg: GoldMessage(msg).currency_data,
     EvNameUpdateXP: lambda msg: XPMessage(msg).xp,
     EvNameUpdateMail: lambda msg: MailMessage(msg).new_mail,

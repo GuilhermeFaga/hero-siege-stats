@@ -19,6 +19,13 @@ class CurrencyData:
         self.GNS = currencyData['GNS']
         self.GNH = currencyData['GNH']
 
+    @staticmethod
+    def cast(model):
+        if isinstance(model, CurrencyData):
+            return model
+        else:
+            raise Exception("Invalid model")
+
 
 class GoldMessage(BaseMessage):
     currency_data: CurrencyData

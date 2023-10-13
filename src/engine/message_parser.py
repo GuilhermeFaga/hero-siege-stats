@@ -2,6 +2,7 @@ import json
 import re
 
 from src.consts import events as consts
+from src.models.event import Event
 
 
 class MessageParser:
@@ -28,10 +29,7 @@ class MessageParser:
         if event_name is None or msg_dict is None:
             return None
 
-        return {
-            consts.EvKeyName: event_name,
-            consts.EvKeyValue: consts.EvValues[event_name](msg_dict)
-        }
+        return Event(event_name, consts.EvValues[event_name](msg_dict))
 
     @staticmethod
     def identify_event(msg_dict: dict):
