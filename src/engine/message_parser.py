@@ -7,9 +7,11 @@ from scapy.layers.inet import TCP
 
 from src.models.events.gold import GoldEvent
 from src.models.events.xp import XPEvent
+from src.models.events.account import AccountEvent
 
 from src.models.messages.gold import GoldMessage
 from src.models.messages.xp import XPMessage
+from src.models.messages.account import AccountMessage
 
 from src.consts import events as consts
 
@@ -30,7 +32,7 @@ class MessageParser:
         msg = match.group(0)
         try:
             parsed = json.loads(msg)
-            print("MessageParser.capture:", parsed)
+            # print("MessageParser.capture:", parsed)
             return parsed
         except:
             # print("MessageParser.capture.except:", msg)
@@ -47,6 +49,8 @@ class MessageParser:
             return GoldEvent(GoldMessage(msg_dict))
         if event_name == consts.EvNameUpdateXP:
             return XPEvent(XPMessage(msg_dict))
+        if event_name == consts.EvNameUpdateAccount:
+            return AccountEvent(AccountMessage(msg_dict))
 
     @staticmethod
     def identify_event(msg_dict: dict):

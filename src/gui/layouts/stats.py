@@ -28,13 +28,17 @@ class GoldRow(Row):
 
 class XPRow(Row):
     def __init__(self):
+        self.total_xp_label = QLabel(str(0))
         self.total_xp_earned_label = QLabel(str(0))
         Row.__init__(self, [
+            QLabel("XP:"),
+            self.total_xp_label,
             QLabel("XP earned:"),
             self.total_xp_earned_label
         ])
 
     def update(self, xp_stats: XPStats):
+        self.total_xp_label.setText(str(xp_stats.total_xp))
         self.total_xp_earned_label.setText(str(xp_stats.total_xp_earned))
 
 

@@ -4,5 +4,5 @@ class BaseMessage:
     message: str
 
     def __init__(self, msg_dict: dict):
-        self.status = msg_dict['status']
-        self.message = msg_dict['message']
+        self.status = msg_dict.get('status', '')
+        self.message = msg_dict.get('message', '')

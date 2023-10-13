@@ -7,6 +7,7 @@ from src.models.stats.xp import XPStats
 from src.models.events.base import BaseEvent
 from src.models.events.gold import GoldEvent
 from src.models.events.xp import XPEvent
+from src.models.events.account import AccountEvent
 
 
 class GameStats:
@@ -24,7 +25,11 @@ class GameStats:
         if isinstance(event, GoldEvent):
             self.gold.update(event.value)
         if isinstance(event, XPEvent):
-            self.xp.update(event.value)
+            self.xp.add(event.value)
+        if isinstance(event, AccountEvent):
+            self.xp.update(
+                total_xp=event.value.experience
+            )
 
     def reset(self):
         self.session_start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
