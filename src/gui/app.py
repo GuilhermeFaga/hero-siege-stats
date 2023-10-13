@@ -6,15 +6,19 @@ from PySide6.QtWidgets import QApplication
 from src.engine import Engine
 from src.gui.widgets.main import MainWidget
 
+from .styling import style
+
 
 def run():
     print("Initializing...")
     sniffer = Engine.initialize()
 
     WIDTH = 300
-    HEIGHT = 220
+    HEIGHT = 0
 
     app = QApplication(sys.argv)
+
+    app.setStyleSheet(style)
 
     geometry = app.screens()[0].size()
 
