@@ -1,12 +1,14 @@
 import sys
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QFile
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QFontDatabase
 
 from src.engine import Engine
 from src.gui.widgets.main import MainWidget
 
 from .styling import style
+from src.utils import assets
 
 
 def run():
@@ -17,6 +19,9 @@ def run():
     HEIGHT = 0
 
     app = QApplication(sys.argv)
+
+    QFontDatabase.addApplicationFont(assets.font('cookierunbold.ttf'))
+    QFontDatabase.addApplicationFont(assets.font('otsutomefont.ttf'))
 
     app.setStyleSheet(style)
 

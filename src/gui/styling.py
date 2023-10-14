@@ -3,6 +3,7 @@ font_size = 14
 
 style = """
     QWidget {
+        font-family: "CookieRun Bold";
         font-size: %s;
         background-color: black;
         color: white;
