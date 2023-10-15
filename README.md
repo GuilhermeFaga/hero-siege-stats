@@ -8,7 +8,7 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## How to use
 
-1. Download the latest release from the [releases page]() and run it.
+1. Download the latest release from the [releases page](https://github.com/GuilhermeFaga/hero-siege-stats/releases) and run it.
 
 2. Start the game and play a bit. Some stats only update after changing maps.
 
