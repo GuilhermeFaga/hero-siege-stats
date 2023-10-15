@@ -7,7 +7,10 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QFontDatabase
 from PySide6.QtGui import QIcon
 
+from scapy.sendrecv import AsyncSniffer
+
 from src.engine import Engine
+from src.gui.messages.error import ErrorMessages
 from src.gui.widgets.main import MainWidget
 
 from .styling import style
@@ -25,12 +28,7 @@ icon_fix()
 
 def run():
     print("Initializing...")
-    sniffer = Engine.initialize()
-
-    if isinstance(sniffer, ConnectionError):
-        print("Connection error")
-        print(sniffer)
-        return
+    initialization_result = Engine.initialize()
 
     WIDTH = 300
     HEIGHT = 0
@@ -63,9 +61,15 @@ def run():
 
     widget.show()
 
+    if isinstance(initialization_result, ConnectionError):
+        ErrorMessages.get_message(widget, initialization_result)
+        print("Connection error")
+        print(initialization_result)
+
     try:
         sys.exit(app.exec())
     except:
         print("Exiting...")
-        sniffer.stop()
+        if isinstance(initialization_result, AsyncSniffer):
+            initialization_result.stop()
         print("Exited")
