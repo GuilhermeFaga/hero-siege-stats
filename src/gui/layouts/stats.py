@@ -1,3 +1,4 @@
+from cgitb import small
 from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtWidgets import QWidget
 
@@ -18,20 +19,26 @@ class SessionRow(Row):
     def __init__(self):
         self.session_duration = ValueDisplay(
             icon=assets_const.IcTime, value=str(0))
+        self.mail = ValueDisplay(
+            icon=assets_const.IcMailOff, value=str(0), small=True)
 
         Row.__init__(self, [
-            self.session_duration
+            self.session_duration,
+            self.mail
         ])
 
     def update(self, session: Session):
         self.session_duration.setValue(session.get_duration_str())
+        self.mail.setIcon(
+            assets_const.IcMailOn if session.has_mail else assets_const.IcMailOff)
+        self.mail.setValue("Mail!" if session.has_mail else "No mail")
 
 
 class GoldRow(Row):
     def __init__(self):
         self.total_gold = ValueDisplay(icon=assets_const.IcCoins, value=str(0))
-        self.total_gold_earned = ValueDisplay(value=str(0))
-        self.gold_per_hour = ValueDisplay(value=str(0))
+        self.total_gold_earned = ValueDisplay(value=str(0), small=True)
+        self.gold_per_hour = ValueDisplay(value=str(0), small=True)
 
         Row.__init__(self, [
             self.total_gold,
@@ -48,8 +55,8 @@ class GoldRow(Row):
 class XPRow(Row):
     def __init__(self):
         self.total_xp = ValueDisplay(icon=assets_const.IcXp, value=str(0))
-        self.total_xp_earned = ValueDisplay(value=str(0))
-        self.total_xp_per_hour = ValueDisplay(value=str(0))
+        self.total_xp_earned = ValueDisplay(value=str(0), small=True)
+        self.total_xp_per_hour = ValueDisplay(value=str(0), small=True)
 
         Row.__init__(self, [
             self.total_xp,

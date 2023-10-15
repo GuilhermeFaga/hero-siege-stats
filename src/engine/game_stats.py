@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from src.models.stats.stats import Stats
 from src.models.stats.session import Session
 from src.models.stats.gold import GoldStats
@@ -9,6 +7,7 @@ from src.models.events.base import BaseEvent
 from src.models.events.gold import GoldEvent
 from src.models.events.xp import XPEvent
 from src.models.events.account import AccountEvent
+from src.models.events.mail import MailEvent
 
 
 class GameStats:
@@ -23,9 +22,9 @@ class GameStats:
         if isinstance(event, XPEvent):
             self.xp.add(event.value)
         if isinstance(event, AccountEvent):
-            self.xp.update(
-                total_xp=event.value.experience
-            )
+            self.xp.update(total_xp=event.value.experience)
+        if isinstance(event, MailEvent):
+            self.session.update(has_mail=bool(event.value))
 
     def reset(self):
         # TODO - reset stats

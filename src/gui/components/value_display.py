@@ -30,10 +30,17 @@ class GroupBox(QFrame):
     icon: ImageWidget
     label: QLabel
 
-    def __init__(self, icon: str | None = None, value: str | None = None):
+    def __init__(self, icon: str | None = None, value: str | None = None, small: bool = False):
         QFrame.__init__(self)
 
         self.setObjectName("GroupBox")
+
+        if small:
+            self.setFixedSize(93, 26)
+            self.setStyleSheet(small_bg)
+        else:
+            self.setFixedSize(146, 26)
+            self.setStyleSheet(normal_bg)
 
         layout = QHBoxLayout(self)
 
@@ -41,13 +48,8 @@ class GroupBox(QFrame):
         layout.setContentsMargins(8, 0, 8, 0)
 
         if icon is not None:
-            self.setFixedSize(146, 26)
-            self.setStyleSheet(normal_bg)
             self.icon = ImageWidget(assets.icon(icon))
             layout.addWidget(self.icon)
-        else:
-            self.setFixedSize(93, 26)
-            self.setStyleSheet(small_bg)
 
         self.label = QLabel()
 
@@ -63,12 +65,12 @@ class GroupBox(QFrame):
 class ValueDisplay(QWidget):
     groupBox: GroupBox
 
-    def __init__(self, icon: str | None = None, value: str | None = None):
+    def __init__(self, icon: str | None = None, value: str | None = None, small: bool = False):
         QWidget.__init__(self)
 
         layout = QHBoxLayout(self)
 
-        self.groupBox = GroupBox(icon=icon, value=value)
+        self.groupBox = GroupBox(icon=icon, value=value, small=small)
         layout.addWidget(self.groupBox)
 
         layout.setSpacing(0)

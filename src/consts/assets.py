@@ -15,3 +15,6 @@ IcCoins: str = "coins.png"
 IcXp: str = "xp.png"
 
 IcTime: str = "time.png"
+
+IcMailOff: str = "mail_0.png"
+IcMailOn: str = "mail_1.png"

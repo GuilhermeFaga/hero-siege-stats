@@ -8,10 +8,12 @@ from scapy.layers.inet import TCP
 from src.models.events.gold import GoldEvent
 from src.models.events.xp import XPEvent
 from src.models.events.account import AccountEvent
+from src.models.events.mail import MailEvent
 
 from src.models.messages.gold import GoldMessage
 from src.models.messages.xp import XPMessage
 from src.models.messages.account import AccountMessage
+from src.models.messages.mail import MailMessage
 
 from src.consts import events as consts
 
@@ -51,6 +53,8 @@ class MessageParser:
             return XPEvent(XPMessage(msg_dict))
         if event_name == consts.EvNameUpdateAccount:
             return AccountEvent(AccountMessage(msg_dict))
+        if event_name == consts.EvNameUpdateMail:
+            return MailEvent(MailMessage(msg_dict))
 
     @staticmethod
     def identify_event(msg_dict: dict):
