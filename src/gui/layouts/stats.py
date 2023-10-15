@@ -31,30 +31,36 @@ class GoldRow(Row):
     def __init__(self):
         self.total_gold = ValueDisplay(icon=assets_const.IcCoins, value=str(0))
         self.total_gold_earned = ValueDisplay(value=str(0))
+        self.gold_per_hour = ValueDisplay(value=str(0))
 
         Row.__init__(self, [
             self.total_gold,
-            self.total_gold_earned
+            self.total_gold_earned,
+            self.gold_per_hour
         ])
 
     def update(self, gold_stats: GoldStats):
         self.total_gold.setValue(f"{gold_stats.total_gold:,}")
         self.total_gold_earned.setValue(f"+{gold_stats.total_gold_earned:,}")
+        self.gold_per_hour.setValue(f"{gold_stats.gold_per_hour:,}/h")
 
 
 class XPRow(Row):
     def __init__(self):
         self.total_xp = ValueDisplay(icon=assets_const.IcXp, value=str(0))
         self.total_xp_earned = ValueDisplay(value=str(0))
+        self.total_xp_per_hour = ValueDisplay(value=str(0))
 
         Row.__init__(self, [
             self.total_xp,
-            self.total_xp_earned
+            self.total_xp_earned,
+            self.total_xp_per_hour
         ])
 
     def update(self, xp_stats: XPStats):
         self.total_xp.setValue(f"{xp_stats.total_xp:,}")
         self.total_xp_earned.setValue(f"+{xp_stats.total_xp_earned:,}")
+        self.total_xp_per_hour.setValue(f"{xp_stats.xp_per_hour:,}/h")
 
 
 class StatsLayout(QWidget):

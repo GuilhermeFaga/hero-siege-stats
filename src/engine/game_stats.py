@@ -31,7 +31,20 @@ class GameStats:
         # TODO - reset stats
         pass
 
+    def update_hourly_stats(self):
+        self.gold.update(
+            gold_per_hour=self.session.calculate_value_per_hour(
+                self.gold.total_gold_earned
+            )
+        )
+        self.xp.update(
+            xp_per_hour=self.session.calculate_value_per_hour(
+                self.xp.total_xp_earned
+            )
+        )
+
     def get_stats(self):
+        self.update_hourly_stats()
         return Stats(
             session=self.session,
             gold_stats=self.gold,

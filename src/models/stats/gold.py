@@ -11,9 +11,11 @@ class GoldStats:
         self.total_gold_earned = total_gold_earned
         self.gold_per_hour = gold_per_hour
 
-    def update(self, currency_data: CurrencyData):
-        if self.total_gold != 0:
-            diff = currency_data.gold - self.total_gold
-            self.total_gold_earned += diff if diff > 0 else 0
-        self.total_gold = currency_data.gold
-        # TODO - calculate gold per hour
+    def update(self, currency_data: CurrencyData | None = None, gold_per_hour=None):
+        if currency_data is not None:
+            if self.total_gold != 0:
+                diff = currency_data.gold - self.total_gold
+                self.total_gold_earned += diff if diff > 0 else 0
+            self.total_gold = currency_data.gold
+        if gold_per_hour is not None:
+            self.gold_per_hour = gold_per_hour

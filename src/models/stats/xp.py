@@ -21,7 +21,6 @@ class XPStats:
             self.total_xp_earned = total_xp_earned
         if xp_per_hour is not None:
             self.xp_per_hour = xp_per_hour
-        # TODO - calculate xp per hour
 
     def add(self, xp: int):
         self.total_xp += int(xp / 0.15)
