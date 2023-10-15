@@ -1,6 +1,10 @@
+from scapy.sendrecv import AsyncSniffer
+
 from src.engine.message_parser import MessageParser
 from src.engine.game_stats import GameStats
 from src.engine.backend import Backend
+
+from src.consts.enums import ConnectionError
 
 
 class Engine:
@@ -21,6 +25,6 @@ class Engine:
         Engine.game_stats.reset()
 
     @staticmethod
-    def initialize():
+    def initialize() -> AsyncSniffer | ConnectionError:
         initialization_result = Backend.initialize(Engine.queue_an_event)
         return initialization_result

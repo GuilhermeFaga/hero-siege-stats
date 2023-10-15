@@ -12,15 +12,25 @@ from src.gui.widgets.main import MainWidget
 
 from .styling import style
 
+from src.consts.enums import ConnectionError
+
 from src.consts import assets as assets_const
 from src.utils import assets
 
-import src.utils.icon_fix
+from src.utils.icon_fix import icon_fix
+
+
+icon_fix()
 
 
 def run():
     print("Initializing...")
     sniffer = Engine.initialize()
+
+    if isinstance(sniffer, ConnectionError):
+        print("Connection error")
+        print(sniffer)
+        return
 
     WIDTH = 300
     HEIGHT = 0
