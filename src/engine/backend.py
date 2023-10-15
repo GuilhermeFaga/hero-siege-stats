@@ -1,12 +1,9 @@
-from scapy.layers.inet import IP, TCP
+import socket
 
 from scapy.interfaces import get_working_ifaces
 from scapy.interfaces import NetworkInterface
 
-from scapy.sendrecv import sr1
 from scapy.sendrecv import AsyncSniffer
-
-from scapy.packet import Packet
 
 from src.consts.enums import ConnectionError
 
@@ -41,33 +38,45 @@ class Backend:
         return get_working_ifaces()
 
     @staticmethod
-    def check_internet_connection():
-        packet = IP(dst="google.com") / TCP(dport=80, flags='S')
-        response: Packet | None = sr1(packet, timeout=5)
+    def check_internet_connection() -> bool:
+        try:
+            s = socket.create_connection(("google.com", 80), timeout=5)
+            s.close()
 
-        if response is None:
-            return False
+            return True
 
-        return True
+        except TimeoutError:
+            print("TimeoutError",  TimeoutError)
+        except socket.gaierror:
+            print("socket.gaierror",  socket.gaierror)
+
+        return False
 
     @staticmethod
-    def check_server_connection() -> list[str] | None:
-        packet = IP(dst=game_addr) / TCP(dport=80, flags='S')
-        response: Packet | None = sr1(packet, timeout=5)
-
-        if response is None:
+    def check_server_connection() -> str | None:
+        if not Backend.check_internet_connection():
             return None
 
-        return response.route()
+        try:
+            s = socket.create_connection((game_addr, 80), timeout=5)
+            connection_iface_ip, _ = s.getsockname()
+            s.close()
+
+            return connection_iface_ip
+
+        except TimeoutError:
+            print("TimeoutError",  TimeoutError)
+        except socket.gaierror:
+            print("socket.gaierror",  socket.gaierror)
+
+        return None
 
     @staticmethod
     def get_connection_interface() -> str | ConnectionError:
-        connection = Backend.check_server_connection()
+        connection_iface_ip = Backend.check_server_connection()
 
-        if connection is None:
+        if connection_iface_ip is None:
             return ConnectionError.NoInternet
-
-        _, connection_iface_ip, _ = connection
 
         for interface in Backend.get_interfaces():
             if "OK" not in interface.flags or not interface.ip:
