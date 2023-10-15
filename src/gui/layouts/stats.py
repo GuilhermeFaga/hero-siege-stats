@@ -16,7 +16,8 @@ from src.consts import assets as assets_const
 
 class SessionRow(Row):
     def __init__(self):
-        self.session_duration = ValueDisplay(assets_const.IcTime, str(0))
+        self.session_duration = ValueDisplay(
+            icon=assets_const.IcTime, value=str(0))
 
         Row.__init__(self, [
             self.session_duration
@@ -28,8 +29,8 @@ class SessionRow(Row):
 
 class GoldRow(Row):
     def __init__(self):
-        self.total_gold = ValueDisplay(assets_const.IcCoins, str(0))
-        self.total_gold_earned = ValueDisplay(assets_const.IcCoins, str(0))
+        self.total_gold = ValueDisplay(icon=assets_const.IcCoins, value=str(0))
+        self.total_gold_earned = ValueDisplay(value=str(0))
 
         Row.__init__(self, [
             self.total_gold,
@@ -43,8 +44,8 @@ class GoldRow(Row):
 
 class XPRow(Row):
     def __init__(self):
-        self.total_xp = ValueDisplay(assets_const.IcXp, str(0))
-        self.total_xp_earned = ValueDisplay(assets_const.IcXp, str(0))
+        self.total_xp = ValueDisplay(icon=assets_const.IcXp, value=str(0))
+        self.total_xp_earned = ValueDisplay(value=str(0))
 
         Row.__init__(self, [
             self.total_xp,

@@ -13,11 +13,6 @@ style = """
         font-size: %s;
         color: #C3AF75;
     }
-    
-    #GroupBox { 
-        background-image: url('%s');
-        background-repeat: no-repeat;
-    }
 
     #Motd, #Motd > * {
         background-color: none;
@@ -42,4 +37,4 @@ style = """
         color: white;
     }
 
-""" % (font_size, assets.hud(assets_const.HudValueDisplay))
+""" % (font_size)

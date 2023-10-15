@@ -1,5 +1,6 @@
 # HUD
 HudValueDisplay: str = "value_display.png"
+HudValueDisplaySm: str = "value_display_small.png"
 
 # Icons
 IcLogo: str = "logo24x24.png"
