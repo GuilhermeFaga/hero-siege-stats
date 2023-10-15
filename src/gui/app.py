@@ -10,8 +10,10 @@ from PySide6.QtGui import QIcon
 from scapy.sendrecv import AsyncSniffer
 
 from src.engine import Engine
-from src.gui.messages.error import ErrorMessages
 from src.gui.widgets.main import MainWidget
+
+from src.gui.messages.error import ErrorMessages
+from src.gui.messages.version import VersionMessages
 
 from .styling import style
 
@@ -20,6 +22,8 @@ from src.consts.enums import ConnectionError
 from src.consts import assets as assets_const
 from src.utils import assets
 
+from src.utils.version import current_version as get_current_version
+from src.utils.version import latest_version as get_latest_version
 from src.utils.icon_fix import icon_fix
 
 
@@ -60,6 +64,12 @@ def run():
     widget.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
 
     widget.show()
+
+    current_version, latest_version = (
+        get_current_version(), get_latest_version())
+
+    if latest_version and current_version != latest_version:
+        VersionMessages.outdated_version(widget)
 
     if isinstance(initialization_result, ConnectionError):
         ErrorMessages.get_message(widget, initialization_result)
