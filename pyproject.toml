@@ -2,14 +2,14 @@
 name = "hero-siege-stats"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Guilherme Faga <firiguito@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
 scapy = "^2.5.0"
-pyshark = "^0.6"
 pyside6 = "^6.5.3"
+pyinstaller = "^6.1.0"
 
 
 [build-system]

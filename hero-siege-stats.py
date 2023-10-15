@@ -1,1 +1,4 @@
-from src import __main__
+from src import run
+
+
+run()
