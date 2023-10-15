@@ -1,12 +1,22 @@
+from src.consts import assets as assets_const
+from src.utils import assets
 
 font_size = 14
 
 style = """
+    QWidget#MainWidget {
+        background-color: #302626;
+    }
+
     QWidget {
         font-family: "CookieRun Bold";
         font-size: %s;
-        background-color: black;
-        color: white;
+        color: #C3AF75;
+    }
+    
+    #GroupBox { 
+        background-image: url('%s');
+        background-repeat: no-repeat;
     }
 
     #Motd, #Motd > * {
@@ -32,4 +42,4 @@ style = """
         color: white;
     }
 
-""" % (font_size)
+""" % (font_size, assets.hud(assets_const.HudValueDisplay))

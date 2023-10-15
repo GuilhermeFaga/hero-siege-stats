@@ -9,7 +9,14 @@ class MainWidget(QWidget):
     def __init__(self):
         QWidget.__init__(self)
 
-        self.setLayout(QVBoxLayout())
+        self.setObjectName("MainWidget")
+
+        layout = QVBoxLayout(self)
+        layout.setSizeConstraint(QVBoxLayout.SizeConstraint.SetFixedSize)
+
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+
         self.view = StatsLayout()
         self.layout().addWidget(self.view)
 
