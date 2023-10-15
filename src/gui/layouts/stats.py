@@ -24,13 +24,13 @@ class GoldRow(Row):
 
     def update(self, gold_stats: GoldStats):
         self.total_gold.setValue(f"{gold_stats.total_gold:,}")
-        self.total_gold_earned.setValue(f"{gold_stats.total_gold_earned:,}")
+        self.total_gold_earned.setValue(f"+{gold_stats.total_gold_earned:,}")
 
 
 class XPRow(Row):
     def __init__(self):
-        self.total_xp = ValueDisplay(assets_const.IcCoins, str(0))
-        self.total_xp_earned = ValueDisplay(assets_const.IcCoins, str(0))
+        self.total_xp = ValueDisplay(assets_const.IcXp, str(0))
+        self.total_xp_earned = ValueDisplay(assets_const.IcXp, str(0))
 
         Row.__init__(self, [
             self.total_xp,
@@ -39,7 +39,7 @@ class XPRow(Row):
 
     def update(self, xp_stats: XPStats):
         self.total_xp.setValue(f"{xp_stats.total_xp:,}")
-        self.total_xp_earned.setValue(f"{xp_stats.total_xp_earned:,}")
+        self.total_xp_earned.setValue(f"+{xp_stats.total_xp_earned:,}")
 
 
 class StatsLayout(QWidget):

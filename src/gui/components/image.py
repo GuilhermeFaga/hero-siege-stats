@@ -11,3 +11,7 @@ class ImageWidget(QLabel):
 
         icon = QImage(image_path)
         self.setPixmap(QPixmap.fromImage(icon))
+
+    def setIcon(self, image_path: str):
+        icon = QImage(image_path)
+        self.setPixmap(QPixmap.fromImage(icon))

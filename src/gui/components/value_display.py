@@ -55,7 +55,7 @@ class ValueDisplay(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
 
     def setIcon(self, icon: str):
-        self.groupBox.icon = ImageWidget(assets.icon(icon))
+        self.groupBox.icon.setIcon(assets.icon(icon))
 
     def setValue(self, value: str):
         self.groupBox.label.setText(value)
