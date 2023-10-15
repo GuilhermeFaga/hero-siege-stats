@@ -3,13 +3,27 @@ from PySide6.QtWidgets import QWidget
 
 from src.gui.components.value_display import ValueDisplay
 from src.gui.components.row import Row
+
 from src.models.stats.stats import Stats
+from src.models.stats.session import Session
 from src.models.stats.gold import GoldStats
 from src.models.stats.xp import XPStats
 
 from src.engine import Engine
 
 from src.consts import assets as assets_const
+
+
+class SessionRow(Row):
+    def __init__(self):
+        self.session_duration = ValueDisplay(assets_const.IcTime, str(0))
+
+        Row.__init__(self, [
+            self.session_duration
+        ])
+
+    def update(self, session: Session):
+        self.session_duration.setValue(session.get_duration_str())
 
 
 class GoldRow(Row):
@@ -52,13 +66,16 @@ class StatsLayout(QWidget):
         layout.setSpacing(8)
         layout.setContentsMargins(8, 8, 8, 8)
 
+        self.session_row = SessionRow()
         self.gold_row = GoldRow()
         self.xp_row = XPRow()
 
+        layout.addWidget(self.session_row)
         layout.addWidget(self.gold_row)
         layout.addWidget(self.xp_row)
 
     def update(self, stats: Stats):
+        self.session_row.update(stats.session)
         self.gold_row.update(stats.gold)
         self.xp_row.update(stats.xp)
 

@@ -12,3 +12,5 @@ IcLogo256: str = "logo256x256.png"
 
 IcCoins: str = "coins.png"
 IcXp: str = "xp.png"
+
+IcTime: str = "time.png"

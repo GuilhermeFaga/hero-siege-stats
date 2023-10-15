@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from src.models.stats.stats import Stats
+from src.models.stats.session import Session
 from src.models.stats.gold import GoldStats
 from src.models.stats.xp import XPStats
 
@@ -11,14 +12,9 @@ from src.models.events.account import AccountEvent
 
 
 class GameStats:
-    session_start_time: str
-
+    session = Session()
     gold = GoldStats()
     xp = XPStats()
-    test = None
-
-    def __init__(self):
-        self.session_start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def process_event(self, event: BaseEvent):
         print("GameStats.process_event:", event)
@@ -32,11 +28,12 @@ class GameStats:
             )
 
     def reset(self):
-        self.session_start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # TODO - reset stats
+        pass
 
     def get_stats(self):
         return Stats(
+            session=self.session,
             gold_stats=self.gold,
             xp_stats=self.xp
         )
