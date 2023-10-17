@@ -16,6 +16,13 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 3. Start the game and play a bit. Some stats only update after changing maps.
 
+## Roadmap
+
+- [ ] Support for all servers (Only Brazil 1 is supported for now)
+- [ ] Session reset button
+- [ ] Items drop counter
+- [ ] XP percentage
+
 # Instructions for developers
 
 ## Running from source
