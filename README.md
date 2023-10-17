@@ -1,3 +1,5 @@
+![Release Version](https://img.shields.io/github/v/release/guilhermefaga/hero-siege-stats) ![Total Downloads](https://img.shields.io/github/downloads/guilhermefaga/hero-siege-stats/total.svg)
+
 # Hero Siege Stats
 
 This is a simple tool that tracks the requests made between the game and the server and displays them in a nice way.
@@ -8,9 +10,11 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## How to use
 
-1. Download the latest release from the [releases page](https://github.com/GuilhermeFaga/hero-siege-stats/releases) and run it.
+1. On Windows make sure that WinPcap is installed in your system. [Npcap downloads page](https://npcap.com/#download) | [Direct link](https://npcap.com/dist/npcap-1.77.exe).
 
-2. Start the game and play a bit. Some stats only update after changing maps.
+2. Download the latest release from the [releases page](https://github.com/GuilhermeFaga/hero-siege-stats/releases) and run it.
+
+3. Start the game and play a bit. Some stats only update after changing maps.
 
 # Instructions for developers
 
