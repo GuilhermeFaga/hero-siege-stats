@@ -10,7 +10,8 @@ from src.consts.enums import ConnectionError
 
 login_servers = {
     "America-Mevius": "104.200.17.141",
-    "Europe-Inoya": "195.197.146.222"
+    "Europe-Inoya": "195.197.146.222",
+    "Europe-Damien": "139.144.181.45"
 }
 
 
