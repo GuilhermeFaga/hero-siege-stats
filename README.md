@@ -18,7 +18,7 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## Roadmap
 
-- [ ] Support for all servers (Only Brazil 1 is supported for now)
+- [ ] Support for all login regions (Only America-Mevius and Europe 2-Damien are supported at the moment)
 - [ ] Session reset button
 - [ ] Items drop counter
 - [ ] XP percentage
