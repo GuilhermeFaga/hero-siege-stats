@@ -18,7 +18,11 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## Roadmap
 
-- [ ] Support for all login regions (Only America-Mevius and Europe 2-Damien are supported at the moment)
+- [ ] Support for all login regions
+  - [x] Mevius (America)
+  - [x] Inoya (Europe 1)
+  - [x] Damien (Europe 2)
+  - [ ] Karponia (Asia)
 - [ ] Session reset button
 - [ ] Items drop counter
 - [ ] XP percentage
