@@ -44,7 +44,7 @@ class ErrorMessages:
             "On windows make sure that WinPcap is installed in your system.")
         msg.setInformativeText("WinPcap can be installed from <a href='{}'>here</a> <br>\
             <b>Make sure to install with the \"Install Npcap in WinPcap API-compatible Mode\"<b> option."
-                               .format('https://nmap.org/npcap/dist/npcap-0.9990.exe'))
+                               .format('https://npcap.com/dist/npcap-1.77.exe'))
 
         msg.show()
 
