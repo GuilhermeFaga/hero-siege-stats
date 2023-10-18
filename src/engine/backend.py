@@ -8,7 +8,10 @@ from scapy.sendrecv import AsyncSniffer
 from src.consts.enums import ConnectionError
 
 
-game_addr = "104.200.17.141"
+login_servers = {
+    "America-Mevius": "104.200.17.141",
+    "Europe-Inoya": "195.197.146.222"
+}
 
 
 class Backend:
@@ -25,7 +28,7 @@ class Backend:
         # TODO - Find the correct game server IP
         sniffer = AsyncSniffer(
             iface=iface,
-            filter=f"host {game_addr} and len > 70",
+            filter=f"(host {' or host '.join(login_servers.values())}) and len > 70",
             prn=packet_callback,
             store=False
         )
@@ -58,7 +61,8 @@ class Backend:
             return None
 
         try:
-            s = socket.create_connection((game_addr, 80), timeout=5)
+            s = socket.create_connection(
+                (login_servers["America-Mevius"], 80), timeout=5)
             connection_iface_ip, _ = s.getsockname()
             s.close()
 
