@@ -15,7 +15,7 @@ class XPStats:
         if total_xp is not None:
             if self.total_xp != 0:
                 diff = total_xp - self.total_xp
-                self.total_xp += diff if diff > 0 else 0
+                self.total_xp_earned += diff if diff > 0 else 0
             self.total_xp = total_xp
         if total_xp_earned is not None:
             self.total_xp_earned = total_xp_earned
