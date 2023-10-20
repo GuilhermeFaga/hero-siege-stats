@@ -1,5 +1,6 @@
 # HUD
-HudValueDisplay: str = "value_display.png"
+HudValueDisplayLg: str = "value_display_large.png"
+HudValueDisplayMd: str = "value_display_normal.png"
 HudValueDisplaySm: str = "value_display_small.png"
 
 # Icons
@@ -18,3 +19,12 @@ IcTime: str = "time.png"
 
 IcMailOff: str = "mail_0.png"
 IcMailOn: str = "mail_1.png"
+
+IcChest: str = "chest.png"
+
+# Font Colors
+FcDefault: str = "<font color=\"#C3AF75\">"
+FcAngelic: str = "<font color=\"#F6F794\">"
+FcHeroic: str = "<font color=\"#00FFAE\">"
+FcSatanic: str = "<font color=\"#CA1717\">"
+FcBlue: str = "<font color=\"#5050AE\">"

@@ -29,7 +29,7 @@ class Backend:
         # TODO - Find the correct game server IP
         sniffer = AsyncSniffer(
             iface=iface,
-            filter=f"(host {' or host '.join(login_servers.values())}) and len > 70",
+            filter=f"(host {' or host '.join(login_servers.values())}) and len > 30",
             prn=packet_callback,
             store=False
         )

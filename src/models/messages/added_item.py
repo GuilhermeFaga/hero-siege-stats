@@ -1,7 +1,7 @@
 from src.models.messages.base import BaseMessage
 
 
-class addedItemObject:
+class AddedItemObject:
     seed: int
     id: int
     token_level: int
@@ -52,9 +52,9 @@ class addedItemObject:
 
 
 class AddedItemMessage(BaseMessage):
-    addedItemFingerprint: str
+    addedItemFingerprint: str | None
 
     def __init__(self, msg_dict: dict):
         super().__init__(msg_dict)
-        self.addedItemFingerprint = msg_dict['addedItemFingerprint']
-        self.addedItemObject = addedItemObject(msg_dict['addedItemObject'])
+        self.addedItemFingerprint = msg_dict.get('addedItemFingerprint')
+        self.addedItemObject = AddedItemObject(msg_dict['addedItemObject'])

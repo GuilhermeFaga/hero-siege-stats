@@ -9,11 +9,13 @@ from src.models.events.gold import GoldEvent
 from src.models.events.xp import XPEvent
 from src.models.events.account import AccountEvent
 from src.models.events.mail import MailEvent
+from src.models.events.added_item import AddedItemEvent
 
 from src.models.messages.gold import GoldMessage
 from src.models.messages.xp import XPMessage
 from src.models.messages.account import AccountMessage
 from src.models.messages.mail import MailMessage
+from src.models.messages.added_item import AddedItemMessage
 
 from src.consts import events as consts
 
@@ -55,6 +57,8 @@ class MessageParser:
             return AccountEvent(AccountMessage(msg_dict))
         if event_name == consts.EvNameUpdateMail:
             return MailEvent(MailMessage(msg_dict))
+        if event_name == consts.EvNameItemAdded:
+            return AddedItemEvent(AddedItemMessage(msg_dict))
 
     @staticmethod
     def identify_event(msg_dict: dict):
@@ -80,6 +84,11 @@ class MessageParser:
             return None
 
         if TCP not in packet:
+            return None
+
+        try:
+            packet.load
+        except:
             return None
 
         msg = None
