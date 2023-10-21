@@ -2,7 +2,7 @@ from src.models.messages.base import BaseMessage
 
 
 class AccountMessage(BaseMessage):
-    version: int
+    version: int | None
     name: str
     class_id: int
     level: int
@@ -65,7 +65,7 @@ class AccountMessage(BaseMessage):
 
     def __init__(self, msg_dict: dict):
         super().__init__(msg_dict)
-        self.version = msg_dict['version']
+        self.version = msg_dict.get('version')
         self.name = msg_dict['name']
         self.class_id = msg_dict['class']
         self.level = msg_dict['level']
