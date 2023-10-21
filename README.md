@@ -8,6 +8,21 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ![App preview](/assets/readme/preview.jpg)
 
+## Features
+
+- Session time
+- Mailbox notification
+- Gold earned and gold per hour
+- XP earned and XP per hour
+- Items picked up (Angelic, Heroic and Satanic) (Blue number means Magic Find drops)
+ 
+## Limitations
+
+- Gold picked up from mailbox is counted as gold earned
+- XP earned can be wrong when leveling up (would need the max XP for each level)
+- Items moved between inventories are counted as picked up
+- Items dropped by players are counted as picked up
+
 ## How to use
 
 1. On Windows make sure that WinPcap is installed in your system. [Npcap downloads page](https://npcap.com/#download) | [Direct link](https://npcap.com/dist/npcap-1.77.exe).
@@ -24,7 +39,7 @@ This is a simple tool that tracks the requests made between the game and the ser
   - [x] Damien (Europe 2)
   - [ ] Karponia (Asia)
 - [ ] Session reset button
-- [ ] Items drop counter
+- [x] Items drop counter
 - [ ] XP percentage
 
 # Instructions for developers
