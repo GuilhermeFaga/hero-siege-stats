@@ -6,14 +6,7 @@ from scapy.interfaces import NetworkInterface
 
 from scapy.sendrecv import AsyncSniffer
 
-from src.consts.enums import ConnectionError
-
-
-class Regions(str, Enum):
-    AMERICAS = "America-Mevius"
-    EUROPE_1 = "Europe-Inoya"
-    EUROPE_2 = "Europe-Damien"
-    ASIA = "Asia-Karponia"
+from src.consts.enums import ConnectionError, Regions
 
 
 login_servers: dict[Regions, str] = {
@@ -27,8 +20,8 @@ login_servers: dict[Regions, str] = {
 class Backend:
 
     @staticmethod
-    def initialize(packet_callback) -> AsyncSniffer | ConnectionError:
-        result = Backend.get_connection_interface()
+    def initialize(packet_callback, region: Regions) -> AsyncSniffer | ConnectionError:
+        result = Backend.get_connection_interface(region=region)
 
         if isinstance(result, ConnectionError):
             return result
@@ -43,6 +36,8 @@ class Backend:
             store=False
         )
         sniffer.start()
+
+        print("Connected to: %s" % region.value)
 
         return sniffer
 
@@ -66,13 +61,15 @@ class Backend:
         return False
 
     @staticmethod
-    def check_server_connection() -> str | None:
+    def check_server_connection(region: Regions) -> str | None:
         if not Backend.check_internet_connection():
             return None
 
         try:
+            # s = socket.create_connection(
+            #     (login_servers[Regions.ASIA], 80), timeout=5)
             s = socket.create_connection(
-                (login_servers[Regions.ASIA], 80), timeout=5)
+                (login_servers[region], 80), timeout=5)
             connection_iface_ip, _ = s.getsockname()
             s.close()
 
@@ -86,8 +83,8 @@ class Backend:
         return None
 
     @staticmethod
-    def get_connection_interface() -> str | ConnectionError:
-        connection_iface_ip = Backend.check_server_connection()
+    def get_connection_interface(region: Regions) -> str | ConnectionError:
+        connection_iface_ip = Backend.check_server_connection(region=region)
 
         if connection_iface_ip is None:
             return ConnectionError.NoInternet
