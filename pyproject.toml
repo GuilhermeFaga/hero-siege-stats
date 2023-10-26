@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hero-siege-stats"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Guilherme Faga <firiguito@gmail.com>"]
 readme = "README.md"
