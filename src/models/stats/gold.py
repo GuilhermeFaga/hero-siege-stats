@@ -19,3 +19,7 @@ class GoldStats:
             self.total_gold = currency_data.gold
         if gold_per_hour is not None:
             self.gold_per_hour = gold_per_hour
+
+    def reset(self) -> None:
+        self.gold_per_hour = 0
+        self.total_gold_earned = 0
