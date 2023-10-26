@@ -8,5 +8,5 @@ PyInstaller.__main__.run([
     '--icon',
     'assets/icons/logo.ico',
     '--add-data',
-    'assets;assets/'
+    'assets:assets'
 ])
