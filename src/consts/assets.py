@@ -1,4 +1,5 @@
 # HUD
+HudValueDisplayXl: str = "value_display_xlarge.png"
 HudValueDisplayLg: str = "value_display_large.png"
 HudValueDisplayMd: str = "value_display_normal.png"
 HudValueDisplaySm: str = "value_display_small.png"
