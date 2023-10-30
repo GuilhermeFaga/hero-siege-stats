@@ -36,8 +36,10 @@ class GameStats:
             self.added_items.update(added_item_object=event.value)
 
     def reset(self):
-        # TODO - reset stats
-        pass
+        self.gold.reset()
+        self.xp.reset()
+        self.added_items.reset()
+        self.session.reset_time()
 
     def update_hourly_stats(self):
         self.gold.update(

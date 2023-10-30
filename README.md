@@ -33,11 +33,11 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## Roadmap
 
-- [ ] Support for all login regions
+- [X] Support for all login regions
   - [x] Mevius (America)
   - [x] Inoya (Europe 1)
   - [x] Damien (Europe 2)
-  - [ ] Karponia (Asia)
+  - [X] Karponia (Asia)
 - [ ] Session reset button
 - [x] Items drop counter
 - [ ] XP percentage

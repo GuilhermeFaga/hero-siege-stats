@@ -33,3 +33,7 @@ class XPStats:
             self.total_xp_earned = total_xp_earned
         if xp_per_hour is not None:
             self.xp_per_hour = xp_per_hour
+
+    def reset(self) -> None:
+        self.xp_per_hour = 0
+        self.total_xp_earned = 0

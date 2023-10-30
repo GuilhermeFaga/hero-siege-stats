@@ -1,3 +1,4 @@
+from enum import Enum
 import socket
 
 from scapy.interfaces import get_working_ifaces
@@ -5,21 +6,22 @@ from scapy.interfaces import NetworkInterface
 
 from scapy.sendrecv import AsyncSniffer
 
-from src.consts.enums import ConnectionError
+from src.consts.enums import ConnectionError, Regions
 
 
-login_servers = {
-    "America-Mevius": "104.200.17.141",
-    "Europe-Inoya": "195.197.146.222",
-    "Europe-Damien": "139.144.181.45"
+login_servers: dict[Regions, str] = {
+    Regions.AMERICAS: "104.200.17.141",
+    Regions.EUROPE_1: "195.197.146.222",
+    Regions.EUROPE_2: "139.144.181.45",
+    Regions.ASIA: "139.162.85.20"
 }
 
 
 class Backend:
 
     @staticmethod
-    def initialize(packet_callback) -> AsyncSniffer | ConnectionError:
-        result = Backend.get_connection_interface()
+    def initialize(packet_callback, region: Regions) -> AsyncSniffer | ConnectionError:
+        result = Backend.get_connection_interface(region=region)
 
         if isinstance(result, ConnectionError):
             return result
@@ -57,13 +59,13 @@ class Backend:
         return False
 
     @staticmethod
-    def check_server_connection() -> str | None:
+    def check_server_connection(region: Regions) -> str | None:
         if not Backend.check_internet_connection():
             return None
 
         try:
             s = socket.create_connection(
-                (login_servers["America-Mevius"], 80), timeout=5)
+                (login_servers[region], 80), timeout=5)
             connection_iface_ip, _ = s.getsockname()
             s.close()
 
@@ -77,8 +79,8 @@ class Backend:
         return None
 
     @staticmethod
-    def get_connection_interface() -> str | ConnectionError:
-        connection_iface_ip = Backend.check_server_connection()
+    def get_connection_interface(region: Regions) -> str | ConnectionError:
+        connection_iface_ip = Backend.check_server_connection(region=region)
 
         if connection_iface_ip is None:
             return ConnectionError.NoInternet

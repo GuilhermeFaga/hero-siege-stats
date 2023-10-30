@@ -4,7 +4,7 @@ from src.engine.message_parser import MessageParser
 from src.engine.game_stats import GameStats
 from src.engine.backend import Backend
 
-from src.consts.enums import ConnectionError
+from src.consts.enums import ConnectionError, Regions
 
 
 class Engine:
@@ -25,6 +25,6 @@ class Engine:
         Engine.game_stats.reset()
 
     @staticmethod
-    def initialize() -> AsyncSniffer | ConnectionError:
-        initialization_result = Backend.initialize(Engine.queue_an_event)
+    def initialize(region: Regions = Regions.ASIA) -> AsyncSniffer | ConnectionError:
+        initialization_result = Backend.initialize(Engine.queue_an_event, region=region)
         return initialization_result

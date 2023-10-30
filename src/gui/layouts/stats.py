@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtWidgets import QWidget
 
-from src.gui.components.value_display import ValueDisplay
+from src.gui.components.value_display import ValueDisplay, ResetButton
 from src.gui.components.row import Row
 
 from src.models.stats.stats import Stats
@@ -22,10 +22,13 @@ class SessionRow(Row):
             icon=assets_const.IcTime, value=str(0))
         self.mail = ValueDisplay(
             icon=assets_const.IcMailOff, value=str(0), size=Sizes.Small)
+        self.reset_button = ResetButton(
+            icon=None, value="Reset", size=Sizes.Small)
 
         Row.__init__(self, [
             self.session_duration,
-            self.mail
+            self.mail,
+            self.reset_button
         ])
 
     def update(self, session: Session):

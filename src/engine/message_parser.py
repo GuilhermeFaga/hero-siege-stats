@@ -10,6 +10,7 @@ from src.models.events.xp import XPEvent
 from src.models.events.account import AccountEvent
 from src.models.events.mail import MailEvent
 from src.models.events.added_item import AddedItemEvent
+from src.models.events.drop import ItemDropEvent
 
 from src.models.messages.gold import GoldMessage
 from src.models.messages.xp import XPMessage
@@ -18,6 +19,7 @@ from src.models.messages.mail import MailMessage
 from src.models.messages.added_item import AddedItemMessage
 
 from src.consts import events as consts
+from src.consts.enums import ItemSources
 
 
 _continuos_packets: dict[str, list[str]] = {}
@@ -34,6 +36,11 @@ class MessageParser:
             return None
 
         msg = match.group(0)
+
+        # Log messages to file
+        with open("./messages.txt", "a") as file:
+            file.write(msg + "\n")
+
         try:
             parsed = json.loads(msg)
             # print("MessageParser.capture:", parsed)
@@ -59,6 +66,8 @@ class MessageParser:
             return MailEvent(MailMessage(msg_dict))
         if event_name == consts.EvNameItemAdded:
             return AddedItemEvent(AddedItemMessage(msg_dict))
+        if event_name == consts.EvNameItemDrop:
+            return ItemDropEvent(msg_dict)
 
     @staticmethod
     def identify_event(msg_dict: dict):
@@ -74,6 +83,8 @@ class MessageParser:
             return consts.EvNameUpdateSatanicZone
         elif 'name' in msg_dict:
             return consts.EvNameUpdateAccount
+        elif msg_dict.get("message") == ItemSources.NEW_ITEM.value:
+            return consts.EvNameItemDrop
         else:
             return None
 
@@ -91,7 +102,7 @@ class MessageParser:
         except:
             return None
 
-        msg = None
+        msg: dict = {}
         packet_src = str(packet[IP].src)
         packet_key = str(packet[TCP].ack)
 
@@ -117,5 +128,11 @@ class MessageParser:
 
         if msg is None:
             return None
+
+        # Check if player has obtained an item
+        if msg.get("addedItemObject") is not None:
+            # Do not generate item event if item not picked up from ground
+            if msg.get("message") != ItemSources.FROM_GROUND:
+                return None
 
         return MessageParser.message_to_event(msg)

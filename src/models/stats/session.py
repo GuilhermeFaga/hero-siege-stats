@@ -24,3 +24,6 @@ class Session:
         if duration.seconds == 0:
             return 0
         return int(value / (duration.seconds / 3600))
+    
+    def reset_time(self) -> None:
+        self.start_time = datetime.now()
