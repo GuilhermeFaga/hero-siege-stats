@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtWidgets import QWidget
 
-from src.gui.components.value_display import ValueDisplay, ComboBox
+from src.gui.components.value_display import ValueDisplay, ResetButton
 from src.gui.components.row import Row
 
 from src.models.stats.stats import Stats
@@ -22,12 +22,13 @@ class SessionRow(Row):
             icon=assets_const.IcTime, value=str(0))
         self.mail = ValueDisplay(
             icon=assets_const.IcMailOff, value=str(0), size=Sizes.Small)
-        self.region_select = ComboBox()
+        self.reset_button = ResetButton(
+            icon=None, value="Reset", size=Sizes.Small)
 
         Row.__init__(self, [
             self.session_duration,
             self.mail,
-            self.region_select
+            self.reset_button
         ])
 
     def update(self, session: Session):
@@ -41,7 +42,7 @@ class GoldRow(Row):
     def __init__(self):
         self.total_gold = ValueDisplay(icon=assets_const.IcCoins, value=str(0))
         self.total_gold_earned = ValueDisplay(value=str(0), size=Sizes.Small)
-        self.gold_per_hour = ValueDisplay(value=str(0), size=Sizes.XLarge)
+        self.gold_per_hour = ValueDisplay(value=str(0), size=Sizes.Small)
 
         Row.__init__(self, [
             self.total_gold,
@@ -59,7 +60,7 @@ class XPRow(Row):
     def __init__(self):
         self.total_xp = ValueDisplay(icon=assets_const.IcXp, value=str(0))
         self.total_xp_earned = ValueDisplay(value=str(0), size=Sizes.Small)
-        self.total_xp_per_hour = ValueDisplay(value=str(0), size=Sizes.XLarge)
+        self.total_xp_per_hour = ValueDisplay(value=str(0), size=Sizes.Small)
 
         Row.__init__(self, [
             self.total_xp,
@@ -78,7 +79,7 @@ class AddedItemsRow(Row):
         self.total_angelic = ValueDisplay(
             icon=assets_const.IcChest, value=str(0))
         self.total_heroic = ValueDisplay(value=str(0), size=Sizes.Small)
-        self.total_satanic = ValueDisplay(value=str(0), size=Sizes.XLarge)
+        self.total_satanic = ValueDisplay(value=str(0), size=Sizes.Small)
 
         Row.__init__(self, [
             self.total_angelic,

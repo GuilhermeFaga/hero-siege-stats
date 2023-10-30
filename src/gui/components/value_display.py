@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QHBoxLayout
 from PySide6.QtWidgets import QWidget
 from PySide6.QtWidgets import QFrame
 from PySide6.QtWidgets import QLabel
-from PySide6.QtWidgets import QComboBox
+from PySide6.QtWidgets import QPushButton
 
 from src.gui.components.image import ImageWidget
 
@@ -13,7 +13,6 @@ from src.consts.enums import Sizes, Regions
 from src.utils import assets
 
 from src.engine import Engine
-from src.engine.backend import Backend
 
 
 region_str_to_enum: dict[str, Regions] = {
@@ -22,14 +21,6 @@ region_str_to_enum: dict[str, Regions] = {
     "Europe-Inoya": Regions.EUROPE_1,
     "Europe-Damien": Regions.EUROPE_2
 }
-
-
-xlarge_bg = """
-    #GroupBox {
-        background-image: url('%s');
-        background-repeat: no-repeat;
-    }
-""" % assets.hud(assets_const.HudValueDisplayXl)
 
 large_bg = """
     #GroupBox {
@@ -57,14 +48,12 @@ display_width = {
     Sizes.Small: 96,
     Sizes.Medium: 104,
     Sizes.Large: 120,
-    Sizes.XLarge: 125,
 }
 
 display_bg = {
     Sizes.Small: small_bg,
     Sizes.Medium: normal_bg,
     Sizes.Large: large_bg,
-    Sizes.XLarge: xlarge_bg
 }
 
 
@@ -100,13 +89,6 @@ class GroupBox(QFrame):
         layout.addWidget(self.label)
 
 
-class ComboGroupBox(GroupBox):
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.setStyleSheet(None)
-
-
 class ValueDisplay(QWidget):
     groupBox: GroupBox
 
@@ -128,25 +110,24 @@ class ValueDisplay(QWidget):
         self.groupBox.label.setText(value)
 
 
-class ComboBox(QComboBox):
+class ResetButton(QPushButton):
     groupBox: GroupBox
 
-    def __init__(self):
-        QComboBox.__init__(self)
-
-        for region in Regions:
-            self.addItem(region.value)
+    def __init__(self, icon: str | None = None, value: str | None = None, size: Sizes = Sizes.Large):
+        QPushButton.__init__(self)
 
         layout = QHBoxLayout(self)
+        self.setMinimumSize(display_width[size], 26)
 
-        self.groupBox = ComboGroupBox()
+        self.groupBox = GroupBox(icon=icon, value=value, size=size)
+        self.groupBox.setStyleSheet("")
         layout.addWidget(self.groupBox)
+
 
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        self.activated.connect(slot=self.on_select)
+        self.clicked.connect(slot=self.on_select)
 
     def on_select(self) -> None:
-        Backend.initialize(Engine.queue_an_event, region=region_str_to_enum[self.currentText()])
         Engine.reset_stats()

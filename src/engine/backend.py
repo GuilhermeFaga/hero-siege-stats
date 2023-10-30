@@ -37,8 +37,6 @@ class Backend:
         )
         sniffer.start()
 
-        print("Connected to: %s" % region.value)
-
         return sniffer
 
     @staticmethod
@@ -66,8 +64,6 @@ class Backend:
             return None
 
         try:
-            # s = socket.create_connection(
-            #     (login_servers[Regions.ASIA], 80), timeout=5)
             s = socket.create_connection(
                 (login_servers[region], 80), timeout=5)
             connection_iface_ip, _ = s.getsockname()
