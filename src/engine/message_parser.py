@@ -34,6 +34,11 @@ class MessageParser:
             return None
 
         msg = match.group(0)
+
+        # Log messages to file
+        with open("./messages.txt", "a") as file:
+            file.write(msg + "\n")
+
         try:
             parsed = json.loads(msg)
             # print("MessageParser.capture:", parsed)
