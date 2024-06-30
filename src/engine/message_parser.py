@@ -5,17 +5,20 @@ from scapy.all import Packet
 from scapy.layers.inet import IP
 from scapy.layers.inet import TCP
 
+from src.models.events.base import BaseEvent
 from src.models.events.gold import GoldEvent
 from src.models.events.xp import XPEvent
 from src.models.events.account import AccountEvent
 from src.models.events.mail import MailEvent
 from src.models.events.added_item import AddedItemEvent
+from src.models.events.satanic_zone import SatanicZoneEvent
 
 from src.models.messages.gold import GoldMessage
 from src.models.messages.xp import XPMessage
 from src.models.messages.account import AccountMessage
 from src.models.messages.mail import MailMessage
 from src.models.messages.added_item import AddedItemMessage
+from src.models.messages.satanic_zone import SatanicZoneMessage
 
 from src.consts import events as consts
 
@@ -27,41 +30,47 @@ _last_src_ack: dict[str, str] = {}
 class MessageParser:
 
     @staticmethod
-    def capture(message):
+    def capture(message)-> list | None:
         match = re.search("{.+}", str(message))
-
         if match is None:
             return None
-
         msg = match.group(0)
         try:
             parsed = json.loads(msg)
             # print("MessageParser.capture:", parsed)
             return parsed
-        except:
-            # print("MessageParser.capture.except:", msg)
-            pass
-
-    @staticmethod
-    def message_to_event(msg_dict: dict):
-        event_name = MessageParser.identify_event(msg_dict)
-
-        if event_name is None or msg_dict is None:
+        except json.JSONDecodeError:
+            #print("MessageParser.capture.except:", msg)
             return None
 
-        if event_name == consts.EvNameUpdateGold:
-            return GoldEvent(GoldMessage(msg_dict))
-        if event_name == consts.EvNameUpdateXP:
-            return XPEvent(XPMessage(msg_dict))
-        if event_name == consts.EvNameUpdateAccount:
-            return AccountEvent(AccountMessage(msg_dict))
-        if event_name == consts.EvNameUpdateMail:
-            return MailEvent(MailMessage(msg_dict))
-        if event_name == consts.EvNameItemAdded:
-            return AddedItemEvent(AddedItemMessage(msg_dict))
 
     @staticmethod
+    def message_to_event(msg_list: list):
+        if msg_list is None:
+            return None
+        events : list[BaseEvent] = []        
+        for msg_dict in msg_list:
+            event_name = MessageParser.identify_event(msg_dict)
+            if event_name is None:
+                continue
+            if event_name == consts.EvNameUpdateGold:
+                events.append(GoldEvent(GoldMessage(msg_dict)))
+            if event_name == consts.EvNameUpdateXP:
+                events.append(XPEvent(XPMessage(msg_dict)))
+            if event_name == consts.EvNameUpdateAccount:
+                events.append(AccountEvent(AccountMessage(msg_dict)))
+            if event_name == consts.EvNameUpdateMail:
+                events.append(MailEvent(MailMessage(msg_dict)))
+            if event_name == consts.EvNameItemAdded:
+                events.append(AddedItemEvent(AddedItemMessage(msg_dict)))
+            if event_name == consts.EvNameUpdateSatanicZone:
+                events.append(SatanicZoneEvent(SatanicZoneMessage(msg_dict)))
+        return events
+    @staticmethod
     def identify_event(msg_dict: dict):
+        if 'steam' in msg_dict:
+            return None
+
         if 'currencyData' in msg_dict:
             return consts.EvNameUpdateGold
         elif 'totalGuildXp' in msg_dict:
@@ -91,7 +100,8 @@ class MessageParser:
         except:
             return None
 
-        msg = None
+        msg_list = None
+        result_messages: list = []
         packet_src = str(packet[IP].src)
         packet_key = str(packet[TCP].ack)
 
@@ -108,14 +118,13 @@ class MessageParser:
             # print("MessageParser.packet_to_event:", load)
             load = load.replace("'b'", '')
             for possible_msg in load.split("\\"):
-                msg = MessageParser.capture(possible_msg)
-                if msg is not None:
-                    break
+                msg_list = MessageParser.capture(possible_msg)
+                if msg_list is not None:
+                    result_messages.append(msg_list) 
             del _continuos_packets[_last_src_ack[packet_src]]
 
         _last_src_ack[packet_src] = packet_key
 
-        if msg is None:
+        if result_messages is None or not result_messages :
             return None
-
-        return MessageParser.message_to_event(msg)
+        return MessageParser.message_to_event(result_messages)
