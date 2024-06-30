@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtWidgets import QWidget
 
+from src.gui.components.image import ImageWidget
 from src.gui.components.value_display import ValueDisplay
 from src.gui.components.row import Row
 
@@ -22,10 +23,9 @@ class SessionRow(Row):
             icon=assets_const.IcTime, value=str(0))
         self.mail = ValueDisplay(
             icon=assets_const.IcMailOff, value=str(0), size=Sizes.Small)
-
         Row.__init__(self, [
             self.session_duration,
-            self.mail
+            self.mail,
         ])
 
     def update(self, session: Session):
@@ -118,6 +118,8 @@ class StatsLayout(QWidget):
         self.gold_row.update(stats.gold)
         self.xp_row.update(stats.xp)
         self.added_items_row.update(stats.added_items)
+        #if stats.satanic_zone.satanic_zone_info is not None:
+            #print(stats.satanic_zone.satanic_zone_info.buffs[0].buff_name)
 
     def refresh(self):
         stats = Engine.get_stats()
