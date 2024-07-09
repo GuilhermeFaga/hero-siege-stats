@@ -1,4 +1,4 @@
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, Qt
 from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtWidgets import QWidget
 
@@ -10,7 +10,7 @@ class MainWidget(QWidget):
         QWidget.__init__(self)
 
         self.setObjectName("MainWidget")
-
+        self.setAttribute(Qt.WA_AlwaysShowToolTips, True)
         layout = QVBoxLayout(self)
         layout.setSizeConstraint(QVBoxLayout.SizeConstraint.SetFixedSize)
 
