@@ -1,3 +1,5 @@
+import logging
+from src.consts.logger import LOGGING_NAME
 from src.models.stats.stats import Stats
 from src.models.stats.session import Session
 from src.models.stats.account import Account
@@ -23,9 +25,10 @@ class GameStats:
     xp = XPStats()
     added_items = AddedItemsStats()
     satanic_zone = SatanicZoneStats()
+    logger = logging.getLogger(LOGGING_NAME)
 
     def process_event(self, event: BaseEvent):
-        print("GameStats.process_event:", event)
+        self.logger.log(logging.INFO,f"GameStats.process_event: {event}")
         if isinstance(event, GoldEvent):
             self.gold.update(event.value)
         if isinstance(event, XPEvent):

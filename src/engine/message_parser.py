@@ -1,10 +1,12 @@
 import json
+import logging
 import re
 
 from scapy.all import Packet
 from scapy.layers.inet import IP
 from scapy.layers.inet import TCP
 
+from src.consts.logger import LOGGING_NAME
 from src.models.events.base import BaseEvent
 from src.models.events.gold import GoldEvent
 from src.models.events.xp import XPEvent
@@ -28,19 +30,19 @@ _last_src_ack: dict[str, str] = {}
 
 
 class MessageParser:
-
     @staticmethod
     def capture(message)-> list | None:
+        logger = logging.getLogger(LOGGING_NAME)
         match = re.search("{.+}", str(message))
         if match is None:
             return None
         msg = match.group(0)
         try:
             parsed = json.loads(msg)
-            # print("MessageParser.capture:", parsed)
+            #logger.log(logging.DEBUG,f"MessageParser.capture: {parsed}")
             return parsed
         except json.JSONDecodeError:
-            #print("MessageParser.capture.except:", msg)
+            #logger.log(logging.DEBUG,f"MessageParser.capture.except: {msg}")
             return None
 
 
@@ -88,7 +90,7 @@ class MessageParser:
 
     @staticmethod
     def packet_to_event(packet: Packet):
-
+        logger = logging.getLogger(LOGGING_NAME)
         if IP not in packet:
             return None
 
@@ -115,7 +117,7 @@ class MessageParser:
 
         if packet_key != _last_src_ack[packet_src]:
             load = "".join(_continuos_packets[_last_src_ack[packet_src]])
-            # print("MessageParser.packet_to_event:", load)
+            #logger.log(logging.DEBUG,f"MessageParser.packet_to_event: {load}")
             load = load.replace("'b'", '')
             for possible_msg in load.split("\\"):
                 msg_list = MessageParser.capture(possible_msg)
