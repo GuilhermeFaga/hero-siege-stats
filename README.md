@@ -24,6 +24,10 @@ This is a simple tool that tracks the requests made between the game and the ser
 - Items moved between inventories are counted as picked up
 - Items dropped by players are counted as picked up
 
+## Is this allowed?
+![image](https://github.com/GuilhermeFaga/hero-siege-stats/assets/32572430/56a116cb-66b1-45de-afa9-3d3dc7a2ea6c)
+
+
 ## How to use
 
 1. On Windows make sure that WinPcap is installed in your system. [Npcap downloads page](https://npcap.com/#download) | [Direct link](https://npcap.com/dist/npcap-1.77.exe).
