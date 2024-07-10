@@ -15,6 +15,7 @@ This is a simple tool that tracks the requests made between the game and the ser
 - Gold earned and gold per hour
 - XP earned and XP per hour
 - Items picked up (Angelic, Heroic and Satanic) (Blue number means Magic Find drops)
+- Shows Satanic Zone with Buffs(Hover over Buff icons for tooltip with Buffdescriptions)
  
 ## Limitations
 

@@ -16,9 +16,10 @@ class Engine:
 
     @staticmethod
     def queue_an_event(packet):
-        event = MessageParser.packet_to_event(packet)
-        if event is not None:
-            Engine.game_stats.process_event(event)
+        events = MessageParser.packet_to_event(packet)
+        if events is not None or events:
+            for event in events:
+                Engine.game_stats.process_event(event)
 
     @staticmethod
     def reset_stats():

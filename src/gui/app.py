@@ -1,3 +1,4 @@
+import logging
 import sys
 
 from PySide6.QtCore import Qt
@@ -20,18 +21,21 @@ from .styling import style
 from src.consts.enums import ConnectionError
 
 from src.consts import assets as assets_const
+from src.consts.logger import LOGGING_NAME
 from src.utils import assets
 
 from src.utils.version import current_version as get_current_version
 from src.utils.version import latest_version as get_latest_version
 from src.utils.icon_fix import icon_fix
-
+from src.engine.logger import _init_logger
 
 icon_fix()
 
 
 def run():
-    print("Initializing...")
+    _init_logger()
+    logger = logging.getLogger(LOGGING_NAME)
+    logger.log(logging.INFO,"Initializing...")
     initialization_result = Engine.initialize()
 
     WIDTH = 300
@@ -73,13 +77,13 @@ def run():
 
     if isinstance(initialization_result, ConnectionError):
         ErrorMessages.get_message(widget, initialization_result)
-        print("Connection error")
-        print(initialization_result)
+        logger.log(logging.ERROR,"Connection error")
+        logger.log(logging.INFO,initialization_result)
 
     try:
         sys.exit(app.exec())
     except:
-        print("Exiting...")
+        logger.log(logging.INFO,"Exiting...")
         if isinstance(initialization_result, AsyncSniffer):
             initialization_result.stop()
-        print("Exited")
+        logger.log(logging.INFO,"Exited")

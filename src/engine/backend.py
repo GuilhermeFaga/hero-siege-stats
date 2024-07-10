@@ -1,3 +1,4 @@
+import logging
 import socket
 
 from scapy.interfaces import get_working_ifaces
@@ -6,6 +7,7 @@ from scapy.interfaces import NetworkInterface
 from scapy.sendrecv import AsyncSniffer
 
 from src.consts.enums import ConnectionError
+from src.consts.logger import LOGGING_NAME
 
 
 login_servers = {
@@ -16,9 +18,9 @@ login_servers = {
 
 
 class Backend:
-
     @staticmethod
     def initialize(packet_callback) -> AsyncSniffer | ConnectionError:
+        logger = logging.getLogger(LOGGING_NAME)
         result = Backend.get_connection_interface()
 
         if isinstance(result, ConnectionError):
@@ -43,6 +45,7 @@ class Backend:
 
     @staticmethod
     def check_internet_connection() -> bool:
+        logger = logging.getLogger(LOGGING_NAME)
         try:
             s = socket.create_connection(("google.com", 80), timeout=5)
             s.close()
@@ -50,14 +53,15 @@ class Backend:
             return True
 
         except TimeoutError:
-            print("TimeoutError",  TimeoutError)
+            logger.log(logging.ERROR,f"TimeoutError  {TimeoutError}")
         except socket.gaierror:
-            print("socket.gaierror",  socket.gaierror)
+            logger.log(logging.ERROR,f"socket.gaierror  {socket.gaierror}")
 
         return False
 
     @staticmethod
     def check_server_connection() -> str | None:
+        logger = logging.getLogger(LOGGING_NAME)
         if not Backend.check_internet_connection():
             return None
 
@@ -70,9 +74,9 @@ class Backend:
             return connection_iface_ip
 
         except TimeoutError:
-            print("TimeoutError",  TimeoutError)
+            logger.log(logging.ERROR,f"TimeoutError  {TimeoutError}")
         except socket.gaierror:
-            print("socket.gaierror",  socket.gaierror)
+            logger.log(logging.ERROR,f"socket.gaierror  {socket.gaierror}")
 
         return None
 

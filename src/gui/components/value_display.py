@@ -32,18 +32,25 @@ small_bg = """
         background-repeat: no-repeat;
     }
 """ % assets.hud(assets_const.HudValueDisplaySm)
-
+xl_bg = """
+    #GroupBox {
+        background-image: url('%s');
+        background-repeat: no-repeat;
+    }
+""" % assets.hud(assets_const.HudValueDisplayXl)
 
 display_width = {
     Sizes.Small: 96,
     Sizes.Medium: 104,
-    Sizes.Large: 120
+    Sizes.Large: 120,
+    Sizes.XL: 196,
 }
 
 display_bg = {
     Sizes.Small: small_bg,
     Sizes.Medium: normal_bg,
-    Sizes.Large: large_bg
+    Sizes.Large: large_bg,
+    Sizes.XL: xl_bg
 }
 
 

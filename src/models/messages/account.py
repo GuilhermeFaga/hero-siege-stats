@@ -8,8 +8,10 @@ class AccountMessage(BaseMessage):
     level: int
     experience: int
     herolevel: int
-    talentMap: dict[str, int]
-    hero_talents: list[int]
+    talentMap_0: dict[str,int]
+    talentMap_1: dict[str, int]
+    talentMap_2: dict[str,int]
+    talentMap_3: dict[str,int]
     aura: int
     loadout: int
     daily_hunt: int
@@ -17,11 +19,8 @@ class AccountMessage(BaseMessage):
     level_max_damage: float
     level_max_dps: int
     damage_source: str
-    bind_button: list[int]
-    bind_button2: list[int]
     bind_skill: list[int]
     bind_skill2: list[int]
-    guild_reputation: int
     weapon_skin: list[int]
     fortune_enemies: int
     potion_autofill: int
@@ -41,9 +40,7 @@ class AccountMessage(BaseMessage):
     merc_alive: int
     merc_type: int
     merc_aura: int
-    mercTalentMapMelee: dict
-    mercTalentMapRanged: dict
-    mercTalentMapMagic: dict
+    merc_talents: list[int]
     chaos_towers_cleared: int
     wormhole_zone: list[int]
     wormhole_levels: list[int]
@@ -52,13 +49,11 @@ class AccountMessage(BaseMessage):
     shield_skin: int
     playstation_id: str
     attribute_points: list[int]
-    socket_filter: int
     back_accessory: int
     inventory_reset: int
     hat: int
     skin: int
     hardcore: int
-    loot_filter: list[list[int]]
     season: int
     season_reward_effect: int
     season_reward_portal: int
@@ -71,8 +66,10 @@ class AccountMessage(BaseMessage):
         self.level = msg_dict['level']
         self.experience = msg_dict['experience']
         self.herolevel = msg_dict['herolevel']
-        self.talentMap = msg_dict['talentMap']
-        self.hero_talents = msg_dict['hero_talents']
+        self.talentMap_0 = msg_dict['talentMap_0']
+        self.talentMap_1 = msg_dict['talentMap_1']
+        self.talentMap_2 = msg_dict['talentMap_2']
+        self.talentMap_3 = msg_dict['talentMap_3']
         self.aura = msg_dict['aura']
         self.loadout = msg_dict['loadout']
         self.daily_hunt = msg_dict['daily_hunt']
@@ -80,11 +77,8 @@ class AccountMessage(BaseMessage):
         self.level_max_damage = msg_dict['level_max_damage']
         self.level_max_dps = msg_dict['level_max_dps']
         self.damage_source = msg_dict['damage_source']
-        self.bind_button = msg_dict['bind_button']
-        self.bind_button2 = msg_dict['bind_button2']
         self.bind_skill = msg_dict['bind_skill']
         self.bind_skill2 = msg_dict['bind_skill2']
-        self.guild_reputation = msg_dict['guild_reputation']
         self.weapon_skin = msg_dict['weapon_skin']
         self.fortune_enemies = msg_dict['fortune_enemies']
         self.potion_autofill = msg_dict['potion_autofill']
@@ -104,9 +98,7 @@ class AccountMessage(BaseMessage):
         self.merc_alive = msg_dict['merc_alive']
         self.merc_type = msg_dict['merc_type']
         self.merc_aura = msg_dict['merc_aura']
-        self.mercTalentMapMelee = msg_dict['mercTalentMapMelee']
-        self.mercTalentMapRanged = msg_dict['mercTalentMapRanged']
-        self.mercTalentMapMagic = msg_dict['mercTalentMapMagic']
+        self.merc_talents = msg_dict['merc_talents']
         self.chaos_towers_cleared = msg_dict['chaos_towers_cleared']
         self.wormhole_zone = msg_dict['wormhole_zone']
         self.wormhole_levels = msg_dict['wormhole_levels']
@@ -115,13 +107,11 @@ class AccountMessage(BaseMessage):
         self.shield_skin = msg_dict['shield_skin']
         self.playstation_id = msg_dict['playstation_id']
         self.attribute_points = msg_dict['attribute_points']
-        self.socket_filter = msg_dict['socket_filter']
         self.back_accessory = msg_dict['back_accessory']
         self.inventory_reset = msg_dict['inventory_reset']
         self.hat = msg_dict['hat']
         self.skin = msg_dict['skin']
         self.hardcore = msg_dict['hardcore']
-        self.loot_filter = msg_dict['loot_filter']
         self.season = msg_dict['season']
         self.season_reward_effect = msg_dict['season_reward_effect']
         self.season_reward_portal = msg_dict['season_reward_portal']
