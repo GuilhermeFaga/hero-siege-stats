@@ -13,7 +13,8 @@ from src.consts.logger import LOGGING_NAME
 login_servers = {
     "America-Mevius": "104.200.17.141",
     "Europe-Inoya": "195.197.146.222",
-    "Europe-Damien": "139.144.181.45"
+    "Europe-Damien": "139.144.181.45",
+    "Japan-Karponia": "139.162.85.20"
 }
 
 
