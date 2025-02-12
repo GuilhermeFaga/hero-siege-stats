@@ -6,7 +6,7 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ### App preview
 
-![App preview](/assets/readme/preview.jpg)
+![App preview](/assets/readme/preview.png)
 
 ## Features
 
@@ -16,7 +16,7 @@ This is a simple tool that tracks the requests made between the game and the ser
 - XP earned and XP per hour
 - Items picked up (Angelic, Heroic and Satanic) (Blue number means Magic Find drops)
 - Shows Satanic Zone with Buffs(Hover over Buff icons for tooltip with Buffdescriptions)
- 
+
 ## Limitations
 
 - Gold picked up from mailbox is counted as gold earned
@@ -25,6 +25,7 @@ This is a simple tool that tracks the requests made between the game and the ser
 - Items dropped by players are counted as picked up
 
 ## Is this allowed?
+
 ![image](https://github.com/GuilhermeFaga/hero-siege-stats/assets/32572430/56a116cb-66b1-45de-afa9-3d3dc7a2ea6c)
 
 
@@ -38,12 +39,12 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## Roadmap
 
-- [ ] Support for all login regions
-  - [x] Mevius (America)
-  - [x] Inoya (Europe 1)
-  - [x] Damien (Europe 2)
-  - [ ] Karponia (Asia)
-- [ ] Session reset button
+- [X] Support for all login regions
+  - [X] Mevius (America)
+  - [X] Inoya (Europe 1)
+  - [X] Damien (Europe 2)
+  - [X] Karponia (Asia)
+- [X] Session reset button
 - [x] Items drop counter
 - [ ] XP percentage
 
