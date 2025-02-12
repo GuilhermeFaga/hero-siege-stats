@@ -38,10 +38,8 @@ xl_bg = """
         border-width: 2px;
         border-radius: 2px;
         border-color: #2f3436;
-        background-image: url('%s');
     }
 """
-#""" % assets.hud(assets_const.HudValueDisplayXl)
 
 display_width = {
     Sizes.Small: 96,
