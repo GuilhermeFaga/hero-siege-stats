@@ -80,10 +80,11 @@ Same as running from source.
 3. Run `poetry run py build.py`
 4. The executable will be in the `dist` folder
 
-## Authors
+## Contributors
 
 - [Guilherme Faga](https://faga.dev)
 - [Skijearz](https://github.com/Skijearz)
+- [Elliot Chen](https://github.com/keoy7am)
 
 Thanks to **Shalwkz** for helping me with finding the game server address.
 
