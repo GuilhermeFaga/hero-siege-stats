@@ -43,8 +43,17 @@ class GameStats:
             self.satanic_zone.update(event.value)
 
     def reset(self):
-        # TODO - reset stats
-        pass
+        logger = logging.getLogger(LOGGING_NAME)
+        logger.info("Resetting all game stats...")
+        
+        self.session = Session()
+        self.account = Account()
+        self.gold = GoldStats()
+        self.xp = XPStats()
+        self.added_items = AddedItemsStats()
+        self.satanic_zone = SatanicZoneStats()
+        
+        logger.info("All stats have been reset")
 
     def update_hourly_stats(self):
         self.gold.update(
