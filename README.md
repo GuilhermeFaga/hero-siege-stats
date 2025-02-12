@@ -45,7 +45,11 @@ This is a simple tool that tracks the requests made between the game and the ser
   - [X] Damien (Europe 2)
   - [X] Karponia (Asia)
 - [X] Session reset button
-- [x] Items drop counter
+- [ ] Items drop counter
+  - [X] Angelic items
+  - [ ] Unholy items
+  - [X] Heroic items
+  - [X] Satanic items
 - [ ] XP percentage
 
 # Instructions for developers
