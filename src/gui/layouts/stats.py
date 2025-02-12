@@ -23,7 +23,7 @@ class SessionRow(Row):
         self.session_duration = ValueDisplay(
             icon=assets_const.IcTime, value=str(0))
         self.mail = ValueDisplay(
-            icon=assets_const.IcMailOff, value=str(0), size=Sizes.Small)
+            icon=assets_const.IcMailOff, value=str(0), size=Sizes.Medium)
         Row.__init__(self, [
             self.session_duration,
             self.mail,
@@ -50,8 +50,8 @@ class SatanicZoneRow(Row):
 class GoldRow(Row):
     def __init__(self):
         self.total_gold = ValueDisplay(icon=assets_const.IcCoins, value=str(0))
-        self.total_gold_earned = ValueDisplay(value=str(0), size=Sizes.Small)
-        self.gold_per_hour = ValueDisplay(value=str(0), size=Sizes.Small)
+        self.total_gold_earned = ValueDisplay(value=str(0), size=Sizes.Medium)
+        self.gold_per_hour = ValueDisplay(value=str(0), size=Sizes.Medium)
 
         Row.__init__(self, [
             self.total_gold,
@@ -68,8 +68,8 @@ class GoldRow(Row):
 class XPRow(Row):
     def __init__(self):
         self.total_xp = ValueDisplay(icon=assets_const.IcXp, value=str(0))
-        self.total_xp_earned = ValueDisplay(value=str(0), size=Sizes.Small)
-        self.total_xp_per_hour = ValueDisplay(value=str(0), size=Sizes.Small)
+        self.total_xp_earned = ValueDisplay(value=str(0), size=Sizes.Medium)
+        self.total_xp_per_hour = ValueDisplay(value=str(0), size=Sizes.Medium)
 
         Row.__init__(self, [
             self.total_xp,
@@ -87,8 +87,8 @@ class AddedItemsRow(Row):
     def __init__(self):
         self.total_angelic = ValueDisplay(
             icon=assets_const.IcChest, value=str(0))
-        self.total_heroic = ValueDisplay(value=str(0), size=Sizes.Small)
-        self.total_satanic = ValueDisplay(value=str(0), size=Sizes.Small)
+        self.total_heroic = ValueDisplay(value=str(0), size=Sizes.Medium)
+        self.total_satanic = ValueDisplay(value=str(0), size=Sizes.Medium)
 
         Row.__init__(self, [
             self.total_angelic,
