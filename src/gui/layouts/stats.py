@@ -27,7 +27,7 @@ class SessionRow(Row):
             icon=assets_const.IcMailOff, value=str(0), size=Sizes.Medium)
 
         self.reset_button = Button("Reset Stats", size=Sizes.Medium)
-        self.reset_button.clicked(self._handle_reset)
+        self.reset_button.onclick(self._handle_reset)
 
         Row.__init__(self, [
             self.session_duration,

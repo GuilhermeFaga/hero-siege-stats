@@ -39,6 +39,6 @@ class Button(QWidget):
 
         layout.addWidget(self.button)
 
-    def clicked(self, callback):
+    def onclick(self, callback):
         """Connect click event to callback"""
         self.button.clicked.connect(callback) 
