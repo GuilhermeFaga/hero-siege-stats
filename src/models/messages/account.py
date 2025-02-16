@@ -57,6 +57,9 @@ class AccountMessage(BaseMessage):
     season: int
     season_reward_effect: int
     season_reward_portal: int
+    incarnation_exp: int # Reserved for future use
+    merc_alive: int # TODO: Make it Display on UI
+    level_max_damage: int # For interesting information
 
     def __init__(self, msg_dict: dict):
         super().__init__(msg_dict)
@@ -115,3 +118,6 @@ class AccountMessage(BaseMessage):
         self.season = msg_dict['season']
         self.season_reward_effect = msg_dict['season_reward_effect']
         self.season_reward_portal = msg_dict['season_reward_portal']
+        self.incarnation_exp = msg_dict['incarnation_exp']
+        self.merc_alive = msg_dict['merc_alive']
+        self.level_max_damage = msg_dict['level_max_damage']
