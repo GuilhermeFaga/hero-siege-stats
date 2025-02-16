@@ -59,9 +59,9 @@ This is a simple tool that tracks the requests made between the game and the ser
   - [x] USA East
   - [x] USA West
 - [X] Session reset button
-- [ ] Items drop counter
+- [X] Items drop counter
   - [X] Angelic items
-  - [ ] Unholy items
+  - [X] Unholy items
   - [X] Heroic items
   - [X] Satanic items
 - [ ] XP percentage
