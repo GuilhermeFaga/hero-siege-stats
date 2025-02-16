@@ -108,8 +108,10 @@ class AddedItemsRow(Row):
         ])
 
     def update_added_item(self, added_items_stats: AddedItemsStats):
+        angelic_and_unholy_total = added_items_stats.added_items['Angelic']['total'] + added_items_stats.added_items['Unholy']['total']
+        angelic_and_unholy_mf = added_items_stats.added_items['Angelic']['mf'] + added_items_stats.added_items['Unholy']['mf']
         self.total_angelic.setValue(
-            f"{assets_const.FcAngelic}{added_items_stats.added_items['Angelic']['total']:,} {assets_const.FcBlue}({added_items_stats.added_items['Angelic']['mf']:,})")
+            f"{assets_const.FcAngelic}{angelic_and_unholy_total:,} {assets_const.FcBlue}({angelic_and_unholy_mf:,})")
         self.total_heroic.setValue(
             f"{assets_const.FcHeroic}{added_items_stats.added_items['Heroic']['total']:,} {assets_const.FcBlue}({added_items_stats.added_items['Heroic']['mf']:,}) {assets_const.FcDefault}| {assets_const.FcHeroic}{added_items_stats.items_per_hour['Heroic']:,}/h")
         self.total_satanic.setValue(
