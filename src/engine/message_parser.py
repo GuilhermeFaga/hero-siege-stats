@@ -34,83 +34,98 @@ class MessageParser:
     @staticmethod
     def capture(message, src, dst)-> list | None:
         logger = logging.getLogger(LOGGING_NAME)
-        all_servers = list(LOGIN_SERVERS.values()) + list(GAME_SERVERS.values())
-        # Filter out packets from non-game servers
-        if src not in all_servers and dst not in all_servers:
-            return None
-        
-        match = re.search("{.+}", str(message))
-        if match is None:
-            if len(message) <= 100:
-                return None
-            
-            # Skip if first character is not 'x'
-            if message[0] != "x":
-                return None
-                
-            # Skip first 3 characters as they are fixed prefix
-            truncated_message = message[3:]
-            result = None
-            try:
-                import base64
-                # Reserved for future use
-                if "[INV]" in truncated_message:
-                    jwt_token = truncated_message.split("[INV]")[1]
-                    # Decode JWT Token
-                    decoded = base64.b64decode(jwt_token)
-                    result = json.loads(decoded)
-                elif "&" not in truncated_message:
-                    # Decode JWT Token
-                    decoded = base64.b64decode(truncated_message)
-                    result = json.loads(decoded)
-                else:
-                    # Parse URL query string format
-                    from urllib.parse import parse_qs
-                    parsed = parse_qs(truncated_message)
-                    # Convert list values to single values
-                    result = {k:v[0] for k,v in parsed.items()}
-
-                return result
-            except:
-                return None
-            
-        msg = match.group(0)
         try:
-            parsed = json.loads(msg)
-            # Ignore useless packets
-            if 'inventory_charms' in parsed:
+            all_servers = list(LOGIN_SERVERS.values()) + list(GAME_SERVERS.values())
+            # Filter out packets from non-game servers
+            if src not in all_servers and dst not in all_servers:
                 return None
-            # logger.log(logging.DEBUG,f"MessageParser.capture: {parsed} from {src} to {dst}")
-            return parsed
-        except json.JSONDecodeError:
-            #logger.log(logging.DEBUG,f"MessageParser.capture.except: {msg}")
-            return None
+            
+            match = re.search("{.+}", str(message))
+            if match is None:
+                if len(message) <= 100:
+                    return None
+                
+                # Skip if first character is not 'x'
+                if message[0] != "x":
+                    return None
+                
+                # Skip first 3 characters as they are fixed prefix
+                truncated_message = message[3:]
+                result = None
+                try:
+                    import base64
+                    # Reserved for future use
+                    if "[INV]" in truncated_message:
+                        jwt_token = truncated_message.split("[INV]")[1]
+                        # Decode JWT Token
+                        decoded = base64.b64decode(jwt_token)
+                        result = json.loads(decoded)
+                    elif "&" not in truncated_message:
+                        # Decode JWT Token
+                        decoded = base64.b64decode(truncated_message)
+                        result = json.loads(decoded)
+                    else:
+                        # Parse URL query string format
+                        from urllib.parse import parse_qs
+                        parsed = parse_qs(truncated_message)
+                        # Convert list values to single values
+                        result = {k:v[0] for k,v in parsed.items()}
 
+                    return result
+                except Exception as e:
+                    logger.debug(f"Message parsing failed: {e}")
+                    return None
+                
+            msg = match.group(0)
+            try:
+                parsed = json.loads(msg)
+                # Ignore useless packets
+                if 'inventory_charms' in parsed:
+                    return None
+                # logger.log(logging.DEBUG,f"MessageParser.capture: {parsed} from {src} to {dst}")
+                return parsed
+            except json.JSONDecodeError as e:
+                #logger.log(logging.DEBUG,f"MessageParser.capture.except: {msg}")
+                return None
+        except Exception as e:
+            logger.error(f"Error in Capture function: {e}")
+            return None
 
     @staticmethod
     def message_to_event(msg_list: list):
-        if msg_list is None:
+        logger = logging.getLogger(LOGGING_NAME)
+        try:
+            if msg_list is None:
+                return None
+            events : list[BaseEvent] = []
+            for msg_dict in msg_list:
+                try:
+                    event_name = MessageParser.identify_event(msg_dict)
+                    if event_name is None:
+                        continue
+                    if event_name == consts.EvNameUpdateGold:
+                        events.append(GoldEvent(GoldMessage(msg_dict)))
+                    if event_name == consts.EvNameUpdateXP:
+                        events.append(XPEvent(XPMessage(msg_dict)))
+                    if event_name == consts.EvNameUpdateAccount:
+                        events.append(AccountEvent(AccountMessage(msg_dict)))
+                    if event_name == consts.EvNameUpdateMail:
+                        events.append(MailEvent(MailMessage(msg_dict)))
+                    if event_name == consts.EvNameItemAdded:
+                        events.append(AddedItemEvent(AddedItemMessage(msg_dict)))
+                    if event_name == consts.EvNameUpdateSatanicZone:
+                        events.append(SatanicZoneEvent(SatanicZoneMessage(msg_dict)))
+                except Exception as e:
+                    logger.warning(f"Error processing single message: {e}")
+                    continue
+            return events
+        except Exception as e:
+            logger.error(f"Error converting message to event: {e}")
             return None
-        events : list[BaseEvent] = []        
-        for msg_dict in msg_list:
-            event_name = MessageParser.identify_event(msg_dict)
-            if event_name is None:
-                continue
-            if event_name == consts.EvNameUpdateGold:
-                events.append(GoldEvent(GoldMessage(msg_dict)))
-            if event_name == consts.EvNameUpdateXP:
-                events.append(XPEvent(XPMessage(msg_dict)))
-            if event_name == consts.EvNameUpdateAccount:
-                events.append(AccountEvent(AccountMessage(msg_dict)))
-            if event_name == consts.EvNameUpdateMail:
-                events.append(MailEvent(MailMessage(msg_dict)))
-            if event_name == consts.EvNameItemAdded:
-                events.append(AddedItemEvent(AddedItemMessage(msg_dict)))
-            if event_name == consts.EvNameUpdateSatanicZone:
-                events.append(SatanicZoneEvent(SatanicZoneMessage(msg_dict)))
-        return events
+
     @staticmethod
     def identify_event(msg_dict: dict):
+        logger = logging.getLogger(LOGGING_NAME)
         try:
             if 'steam' in msg_dict:
                 return None
@@ -129,48 +144,55 @@ class MessageParser:
                 return consts.EvNameUpdateAccount
             else:
                 return None
-        except:
+        except Exception as e:
+            logger.error(f"Error identifying event type: {e}")
             return None
 
     @staticmethod
     def packet_to_event(packet: Packet):
         logger = logging.getLogger(LOGGING_NAME)
-        if IP not in packet:
-            return None
-
-        if TCP not in packet:
-            return None
-
         try:
-            packet.load
-        except:
+            if IP not in packet or TCP not in packet:
+                return None
+
+            try:
+                packet.load
+            except:
+                return None
+
+            msg_list = None
+            result_messages: list = []
+            packet_src = str(packet[IP].src)
+            packet_key = str(packet[TCP].ack)
+
+            try:
+                if _last_src_ack.get(packet_src, None) is None:
+                    _last_src_ack[packet_src] = packet_key
+
+                if _continuos_packets.get(packet_key, None) is None:
+                    _continuos_packets[packet_key] = []
+
+                _continuos_packets[packet_key].append(str(packet.load))
+
+                if packet_key != _last_src_ack[packet_src]:
+                    load = "".join(_continuos_packets[_last_src_ack[packet_src]])
+                    # logger.log(logging.DEBUG,f"MessageParser.packet_to_event: {load}")
+                    load = load.replace("'b'", '')
+                    for possible_msg in load.split("\\"):
+                        msg_list = MessageParser.capture(possible_msg, packet_src, packet[IP].dst)
+                        if msg_list is not None:
+                            result_messages.append(msg_list)
+                    del _continuos_packets[_last_src_ack[packet_src]]
+
+                _last_src_ack[packet_src] = packet_key
+
+            except Exception as e:
+                logger.error(f"Error processing packet: {e}")
+                return None
+
+            if result_messages is None or not result_messages:
+                return None
+            return MessageParser.message_to_event(result_messages)
+        except Exception as e:
+            logger.error(f"Error converting packet to event: {e}")
             return None
-
-        msg_list = None
-        result_messages: list = []
-        packet_src = str(packet[IP].src)
-        packet_key = str(packet[TCP].ack)
-
-        if _last_src_ack.get(packet_src, None) is None:
-            _last_src_ack[packet_src] = packet_key
-
-        if _continuos_packets.get(packet_key, None) is None:
-            _continuos_packets[packet_key] = []
-
-        _continuos_packets[packet_key].append(str(packet.load))
-
-        if packet_key != _last_src_ack[packet_src]:
-            load = "".join(_continuos_packets[_last_src_ack[packet_src]])
-            # logger.log(logging.DEBUG,f"MessageParser.packet_to_event: {load}")
-            load = load.replace("'b'", '')
-            for possible_msg in load.split("\\"):
-                msg_list = MessageParser.capture(possible_msg, packet_src, packet[IP].dst)
-                if msg_list is not None:
-                    result_messages.append(msg_list)
-            del _continuos_packets[_last_src_ack[packet_src]]
-
-        _last_src_ack[packet_src] = packet_key
-
-        if result_messages is None or not result_messages :
-            return None
-        return MessageParser.message_to_event(result_messages)
