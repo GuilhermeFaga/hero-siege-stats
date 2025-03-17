@@ -1,4 +1,3 @@
-
 ItemsRarity = {
     '1': 'Common',
     '2': 'Superior',
@@ -7,4 +6,5 @@ ItemsRarity = {
     '6': 'Satanic',
     '9': 'Heroic',
     '7': 'Angelic',
+    '10': 'Unholy',
 }

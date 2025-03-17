@@ -12,7 +12,7 @@ class CurrencyData:
     GNH: int
 
     def __init__(self, currencyData: dict):
-        self.account_id = currencyData['account_id']
+        self.account_id = currencyData.get('account_id', 0)
         self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.gold = currencyData['GSS']
         self.GSH = currencyData['GSH']
@@ -25,4 +25,7 @@ class GoldMessage(BaseMessage):
 
     def __init__(self, msg_dict: dict):
         super().__init__(msg_dict)
-        self.currency_data = CurrencyData(msg_dict['currencyData'])
+        if 'currency_data' in msg_dict:
+            self.currency_data = CurrencyData(msg_dict['currency_data'])
+        elif 'currencyData' in msg_dict:
+            self.currency_data = CurrencyData(msg_dict['currencyData'])

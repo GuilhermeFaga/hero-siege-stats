@@ -44,13 +44,29 @@ This is a simple tool that tracks the requests made between the game and the ser
   - [X] Inoya (Europe 1)
   - [X] Damien (Europe 2)
   - [X] Karponia (Asia)
+- [x] Support for all game regions
+  - [x] Australia
+  - [x] Brazil 1
+  - [x] Brazil 2
+  - [x] China 1
+  - [x] China 2
+  - [x] Europe Central
+  - [x] Europe West
+  - [x] Germany
+  - [x] Korea
+  - [x] Russia
+  - [x] USA Central
+  - [x] USA East
+  - [x] USA West
 - [X] Session reset button
-- [ ] Items drop counter
+- [X] Items drop counter
   - [X] Angelic items
-  - [ ] Unholy items
+  - [X] Unholy items
   - [X] Heroic items
   - [X] Satanic items
 - [ ] XP percentage
+- [ ] Fortune mission counter
+- [ ] Mercenary alive status
 
 # Instructions for developers
 

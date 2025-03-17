@@ -5,6 +5,7 @@ from src.models.stats.session import Session
 from src.models.stats.account import Account
 from src.models.stats.gold import GoldStats
 from src.models.stats.xp import XPStats
+from src.models.stats.fortune import FortuneStats
 from src.models.stats.added_items import AddedItemsStats
 from src.models.stats.satanic_zone import SatanicZoneStats
 
@@ -23,6 +24,7 @@ class GameStats:
     account = Account()
     gold = GoldStats()
     xp = XPStats()
+    fortune = FortuneStats()
     added_items = AddedItemsStats()
     satanic_zone = SatanicZoneStats()
     logger = logging.getLogger(LOGGING_NAME)
@@ -35,6 +37,8 @@ class GameStats:
             self.xp.add(event.value)
         if isinstance(event, AccountEvent):
             self.xp.update(total_xp=event.value.experience)
+            # TODO - Find the correct fortune_enemies_killed value
+            self.fortune.update(total_fortune=event.value.fortune_enemies)
         if isinstance(event, MailEvent):
             self.session.update(has_mail=bool(event.value))
         if isinstance(event, AddedItemEvent):

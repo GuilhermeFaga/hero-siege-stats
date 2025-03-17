@@ -13,7 +13,23 @@ LOGIN_SERVERS = {
     "America-Mevius": "104.200.17.141",
     "Europe-Inoya": "195.197.146.222",
     "Europe-Damien": "139.144.181.45",
-    "Japan-Karponia": "139.162.85.20"
+    "Japan-Karponia": "139.162.85.20",
+}
+
+GAME_SERVERS = {
+    "Australia": "143.42.34.47",
+    "Brazil 1": "172.233.15.18", 
+    "Brazil 2": "104.41.42.79",
+    "China 1(Hong Kong)": "207.46.139.217",
+    "China 2(Hong Kong)": "13.75.77.229",
+    "Europe Central(Germany)": "194.195.242.141",
+    "Europe West(France)": "172.232.36.127",
+    "Germany": "139.177.176.8",
+    "Korea(Japan)": "172.105.200.131",
+    "Russia(Germany)": "172.104.128.9",
+    "USA Central(New Jersey)": "104.237.135.123",
+    "USA East(Texas)": "143.42.114.124",
+    "USA West(California)": "192.53.127.188"
 }
 
 CONNECTIVITY_TEST_HOST = "google.com"
@@ -32,10 +48,10 @@ class Backend:
             return iface
 
         try:
-            # TODO - Find the correct game server IP
+            all_servers = list(LOGIN_SERVERS.values()) + list(GAME_SERVERS.values())
             sniffer = AsyncSniffer(
                 iface=iface,
-                filter=f"(host {' or host '.join(LOGIN_SERVERS.values())}) and len > 30",
+                filter=f"(host {' or host '.join(all_servers)}) and len > 30",
                 prn=packet_callback,
                 store=False
             )
