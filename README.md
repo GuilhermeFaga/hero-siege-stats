@@ -10,12 +10,13 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## Features
 
-- Session time
+- Session time and session reset button
 - Mailbox notification
 - Gold earned and gold per hour
 - XP earned and XP per hour
 - Items picked up (Angelic, Heroic and Satanic) (Blue number means Magic Find drops)
 - Shows Satanic Zone with Buffs(Hover over Buff icons for tooltip with Buffdescriptions)
+- Adapt to game server IP changes
 
 ## Limitations
 
@@ -39,26 +40,6 @@ This is a simple tool that tracks the requests made between the game and the ser
 
 ## Roadmap
 
-- [X] Support for all login regions
-  - [X] Mevius (America)
-  - [X] Inoya (Europe 1)
-  - [X] Damien (Europe 2)
-  - [X] Karponia (Asia)
-- [x] Support for all game regions
-  - [x] Australia
-  - [x] Brazil 1
-  - [x] Brazil 2
-  - [x] China 1
-  - [x] China 2
-  - [x] Europe Central
-  - [x] Europe West
-  - [x] Germany
-  - [x] Korea
-  - [x] Russia
-  - [x] USA Central
-  - [x] USA East
-  - [x] USA West
-- [X] Session reset button
 - [X] Items drop counter
   - [X] Angelic items
   - [X] Unholy items
