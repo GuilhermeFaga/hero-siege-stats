@@ -96,7 +96,7 @@ class Backend:
 
         try:
             with socket.create_connection(
-                (LOGIN_SERVERS["America-Mevius"], CONNECTIVITY_TEST_PORT), 
+                (LOGIN_SERVERS["Americas-Mevius"], CONNECTIVITY_TEST_PORT), 
                 timeout=CONNECTION_TIMEOUT
             ) as s:
                 connection_iface_ip, _ = s.getsockname()
