@@ -130,7 +130,7 @@ class MessageParser:
             # Skip non-dictionary messages (commonly from item list packets) to prevent type errors
             # Check if msg_dict is a dictionary type
             if not isinstance(msg_dict, dict):
-                logger.warning(f"msg_dict is not a dictionary, got {type(msg_dict)}, {msg_dict}")
+                # logger.debug(f"msg_dict is not a dictionary, got {type(msg_dict)}, {msg_dict}")
                 return None
 
             if 'steam' in msg_dict:
