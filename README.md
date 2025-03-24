@@ -40,10 +40,14 @@ This is a simple tool that tracks the requests made between the game and the ser
 ## Roadmap
 
 - [X] Support for all login regions
-  - [X] Mevius (America)
   - [X] Inoya (Europe 1)
-  - [X] Damien (Europe 2)
+  - [X] Mevius (America)
   - [X] Karponia (Asia)
+  - [X] Damien (Europe 2)
+  - [X] Gurag (Americas 2)
+  - [X] Shujo Retreat (Asia 2)
+  - [X] Reaper (Europe 3)
+  - [X] Odin (America 3)
 - [x] Support for all game regions
   - [x] Australia
   - [x] Brazil 1
