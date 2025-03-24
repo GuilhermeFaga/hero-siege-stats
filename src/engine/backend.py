@@ -25,7 +25,7 @@ LOGIN_SERVERS = {
 
 GAME_SERVERS = {
     "Australia": "143.42.34.47",
-    "Brazil 1": "172.233.15.18", 
+    "Brazil 1": "172.233.15.18",
     "Brazil 2": "104.41.42.79",
     "China 1(Hong Kong)": "207.46.139.217",
     "China 2(Hong Kong)": "13.75.77.229",
@@ -36,19 +36,20 @@ GAME_SERVERS = {
     "Russia(Germany)": "172.104.128.9",
     "USA Central(New Jersey)": "104.237.135.123",
     "USA East(Texas)": "143.42.114.124",
-    "USA West(California)": "192.53.127.188"
+    "USA West(California)": "192.53.127.188",
 }
 
 CONNECTIVITY_TEST_HOST = "google.com"
 CONNECTIVITY_TEST_PORT = 80
 CONNECTION_TIMEOUT = 5
 
+
 class Backend:
     @staticmethod
     def initialize(packet_callback) -> AsyncSniffer | ConnectionError:
         logger = logging.getLogger(LOGGING_NAME)
         logger.debug("Initializing backend...")
-        
+
         iface = Backend.get_connection_interface()
         if isinstance(iface, ConnectionError):
             logger.error(f"Failed to get connection interface: {iface}")
@@ -60,12 +61,12 @@ class Backend:
                 iface=iface,
                 filter=f"(host {' or host '.join(all_servers)}) and len > 30",
                 prn=packet_callback,
-                store=False
+                store=False,
             )
             sniffer.start()
             logger.info(f"Sniffer started on interface: {iface}")
             return sniffer
-            
+
         except Exception as e:
             logger.error(f"Failed to initialize sniffer: {e}")
             return ConnectionError.InterfaceNotFound
@@ -79,8 +80,8 @@ class Backend:
         logger = logging.getLogger(LOGGING_NAME)
         try:
             with socket.create_connection(
-                (CONNECTIVITY_TEST_HOST, CONNECTIVITY_TEST_PORT), 
-                timeout=CONNECTION_TIMEOUT
+                (CONNECTIVITY_TEST_HOST, CONNECTIVITY_TEST_PORT),
+                timeout=CONNECTION_TIMEOUT,
             ) as s:
                 return True
         except (TimeoutError, socket.gaierror) as e:
@@ -96,8 +97,8 @@ class Backend:
 
         try:
             with socket.create_connection(
-                (LOGIN_SERVERS["America-Mevius"], CONNECTIVITY_TEST_PORT), 
-                timeout=CONNECTION_TIMEOUT
+                (LOGIN_SERVERS["Americas-Mevius"], CONNECTIVITY_TEST_PORT),
+                timeout=CONNECTION_TIMEOUT,
             ) as s:
                 connection_iface_ip, _ = s.getsockname()
                 return connection_iface_ip
@@ -114,31 +115,40 @@ class Backend:
             return ConnectionError.NoInternet
 
         interfaces = Backend.get_interfaces()
-        
+
         def is_valid_physical_interface(iface: NetworkInterface) -> bool:
             return (
-                "OK" in iface.flags 
-                and iface.ip 
-                and "Virtual" not in iface.description 
+                "OK" in iface.flags
+                and iface.ip
+                and "Virtual" not in iface.description
                 and "Hyper-V" not in iface.description
             )
 
         # Try to find matching physical interface
         for interface in interfaces:
-            if is_valid_physical_interface(interface) and interface.ip == connection_iface_ip:
-                logger.info(f"Found matching physical interface: {interface.description}")
+            if (
+                is_valid_physical_interface(interface)
+                and interface.ip == connection_iface_ip
+            ):
+                logger.info(
+                    f"Found matching physical interface: {interface.description}"
+                )
                 return interface.description
 
         # Try to find any available physical interface
         for interface in interfaces:
             if is_valid_physical_interface(interface):
-                logger.info(f"Using available physical interface: {interface.description}")
+                logger.info(
+                    f"Using available physical interface: {interface.description}"
+                )
                 return interface.description
 
         # Fallback to any working interface
         for interface in interfaces:
             if "OK" in interface.flags and interface.ip:
-                logger.warning(f"Falling back to available interface: {interface.description}")
+                logger.warning(
+                    f"Falling back to available interface: {interface.description}"
+                )
                 return interface.description
 
         logger.error("No suitable network interface found")
