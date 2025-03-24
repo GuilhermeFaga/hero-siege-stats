@@ -9,11 +9,18 @@ from scapy.sendrecv import AsyncSniffer
 from src.consts.enums import ConnectionError
 from src.consts.logger import LOGGING_NAME
 
+# capture it in wirewhark with this filter:
+# ssl.handshake.type == 1 && tls.handshake.extensions_server_name contains "panicartstudios.com"
+# then typing error account/password you can get the packet
 LOGIN_SERVERS = {
-    "America-Mevius": "104.200.17.141",
     "Europe-Inoya": "172.105.246.129",
-    "Europe-Damien": "139.144.181.45",
-    "Japan-Karponia": "139.162.85.20",
+    "Americas-Mevius": "104.200.17.141",
+    "Asia-Karponia": "139.162.85.20",
+    "Europe 2-Damien": "139.144.181.45",
+    "Americas 2-Gurag": "104.237.142.252",
+    "Asia 2-Shujo Retreat": "172.104.114.129",
+    "Europe 3-Reaper": "172.104.128.178",
+    "America 3-Odin": "198.58.106.15",
 }
 
 GAME_SERVERS = {
