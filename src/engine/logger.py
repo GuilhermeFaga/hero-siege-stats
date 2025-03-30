@@ -8,6 +8,6 @@ def _init_logger():
     logger.setLevel(logging.INFO)
     handler = logging.StreamHandler(sys.stdout)
     dt_fmt = '%Y-%m-%d %H:%M:%S'
-    formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {module}: {name}: {message}', dt_fmt, style='{')
+    formatter = logging.Formatter('[{asctime}] [{levelname}] [{module}] {message}', dt_fmt, style='{')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
