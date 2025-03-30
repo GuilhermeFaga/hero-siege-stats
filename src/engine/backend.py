@@ -35,7 +35,6 @@ class Backend:
             for connection in connections:
                 if connection.pid == pid:
                     hs_ips.add(connection.raddr.ip)
-        print(hs_ips)
         return hs_ips
 
 
