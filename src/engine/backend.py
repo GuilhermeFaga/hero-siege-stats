@@ -1,11 +1,9 @@
 import logging
 import socket
-import re
+import psutil
 
 from scapy.interfaces import get_working_ifaces
 from scapy.interfaces import NetworkInterface
-
-from scapy.sendrecv import AsyncSniffer
 
 from src.consts.enums import ConnectionError
 from src.consts.logger import LOGGING_NAME
@@ -23,6 +21,24 @@ PROTOCOL_SIGNATURES = {
 }
 
 class Backend:
+
+    @staticmethod
+    def get_open_connections_from_process()-> set:
+        pid :int = 0
+        hs_ips = set()
+        for proccess in psutil.process_iter(['pid','name']):
+            if proccess.info['name'] == "Hero_Siege.exe":
+                pid = proccess.info['pid']
+        
+        if pid != 0:
+            connections = psutil.net_connections(kind="inet")
+            for connection in connections:
+                if connection.pid == pid:
+                    hs_ips.add(connection.raddr.ip)
+        print(hs_ips)
+        return hs_ips
+
+
     @staticmethod
     def get_packet_filter() -> str:
         """
@@ -38,39 +54,14 @@ class Backend:
         # Filter for special format packets (starting with 'x')
         special_filter = f"tcp[((tcp[12:1] & 0xf0) >> 2):1] = 0x{ord(PROTOCOL_SIGNATURES['special_start']):02x}"
         
-        return f"({base_filter}) and ({json_filter} or {special_filter})"
-
-    @staticmethod
-    def initialize(packet_callback) -> AsyncSniffer | ConnectionError:
-        """
-        Initialize packet sniffer with protocol-based filtering
-        Args:
-            packet_callback: Callback function for packet processing
-        Returns:
-            AsyncSniffer instance or ConnectionError
-        """
-        logger = logging.getLogger(LOGGING_NAME)
-        logger.debug("Initializing backend...")
-        
-        iface = Backend.get_connection_interface()
-        if isinstance(iface, ConnectionError):
-            logger.error(f"Failed to get connection interface: {iface}")
-            return iface
-
-        try:
-            sniffer = AsyncSniffer(
-                iface=iface,
-                filter=Backend.get_packet_filter(),
-                prn=packet_callback,
-                store=False
-            )
-            sniffer.start()
-            logger.info(f"Sniffer started on interface: {iface}")
-            return sniffer
-            
-        except Exception as e:
-            logger.error(f"Failed to initialize sniffer: {e}")
-            return ConnectionError.InterfaceNotFound
+        hs_ips = Backend.get_open_connections_from_process()
+        if not hs_ips:
+            ip_filter_string = "len < 0"
+        else:
+            ip_filter_string = f"(host {' or host '.join(hs_ips)}) and len > 30"
+        #following filter line commented out because there seems to be a flaw because no package is actually getting through
+        #return f"({base_filter}) and ({json_filter} or {special_filter})"
+        return ip_filter_string
 
     @staticmethod
     def get_interfaces() -> list[NetworkInterface]:
@@ -84,7 +75,7 @@ class Backend:
                 (CONNECTIVITY_TEST_HOST, CONNECTIVITY_TEST_PORT), 
                 timeout=CONNECTION_TIMEOUT
             ) as s:
-                connection_iface_ip, _ = s.getsockname()
+                connection_iface_ip = s.getsockname()[0]
                 return connection_iface_ip
         except (TimeoutError, socket.gaierror) as e:
             logger.error(f"Internet connection check failed: {e}")
