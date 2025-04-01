@@ -10,7 +10,8 @@ from PySide6.QtGui import QIcon
 
 from scapy.sendrecv import AsyncSniffer
 
-from src.engine import Engine
+
+from src.engine.sniffer_manager import sniffer_manager
 from src.gui.widgets.main import MainWidget
 
 from src.gui.messages.error import ErrorMessages
@@ -27,16 +28,14 @@ from src.utils import assets
 from src.utils.version import current_version as get_current_version
 from src.utils.version import latest_version as get_latest_version
 from src.utils.icon_fix import icon_fix
-from src.engine.logger import _init_logger
+
 
 icon_fix()
 
 
 def run():
-    _init_logger()
     logger = logging.getLogger(LOGGING_NAME)
     logger.log(logging.INFO,"Initializing...")
-    initialization_result = Engine.initialize()
 
     WIDTH = 300
     HEIGHT = 0
@@ -75,15 +74,24 @@ def run():
     if latest_version and current_version != latest_version:
         VersionMessages.outdated_version(widget)
 
-    if isinstance(initialization_result, ConnectionError):
-        ErrorMessages.get_message(widget, initialization_result)
+    if isinstance(sniffer_manager.sniffer, ConnectionError):
+        ErrorMessages.get_message(widget, sniffer_manager.sniffer)
         logger.log(logging.ERROR,"Connection error")
-        logger.log(logging.INFO,initialization_result)
+        logger.log(logging.INFO,sniffer_manager.sniffer)
 
     try:
         sys.exit(app.exec())
-    except:
+    except SystemExit as e:
+        logger.log(logging.INFO, f"Application exited with code: {e.code}")
+    except KeyboardInterrupt:
+        logger.log(logging.INFO, "Application terminated by user (KeyboardInterrupt)")
+    except RuntimeError as e:
+        logger.log(logging.ERROR, f"Qt runtime error: {str(e)}")
+    except Exception as e:
+        logger.log(logging.ERROR, f"Unexpected error: {str(e)}")
+    finally:
         logger.log(logging.INFO,"Exiting...")
-        if isinstance(initialization_result, AsyncSniffer):
-            initialization_result.stop()
+        if isinstance(sniffer_manager.sniffer, AsyncSniffer):
+            if sniffer_manager.sniffer.running:
+                sniffer_manager.sniffer.stop()
         logger.log(logging.INFO,"Exited")

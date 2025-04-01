@@ -1,0 +1,49 @@
+import logging
+import threading
+
+from src.engine import Engine
+from src.engine.backend import Backend
+from src.consts.logger import LOGGING_NAME
+from src.engine import sniffer_filter_thread
+
+from scapy.sendrecv import AsyncSniffer
+from src.consts.enums import ConnectionError
+
+class SnifferManager():
+    def __init__(self,packet_callback):
+        self.logger = logging.getLogger(LOGGING_NAME)
+        self.iface = Backend.get_connection_interface()
+        self.filter = Backend.get_packet_filter()
+        self.callback = packet_callback
+        self._create_sniffer()
+        self.sniffer.start()
+        self._start_filter_thread()
+
+    def _create_sniffer(self):
+        try:
+            self.sniffer = AsyncSniffer(
+                iface=self.iface,
+                filter=self.filter,
+                prn=self.callback,
+                store=False
+            )
+            self.logger.info(f"Sniffer started on interface: {self.iface}")
+        except Exception as e:
+            self.logger.error(f"Failed to initialize sniffer: {e}")
+            #Workaround for app.py handling of sniffer creation/usage
+            self.sniffer = ConnectionError.InterfaceNotFound
+
+    def change_sniffer_filter(self,new_filter):
+        self.sniffer.stop()
+        self.filter = new_filter
+        self._create_sniffer()
+        self.logger.info(f"Sniffer-Filter changed to : {new_filter}")
+        self.sniffer.start()
+    
+    def _start_filter_thread(self):
+        check_for_filter_changes_thread = threading.Thread(target=sniffer_filter_thread.observe_changing_ips,args=(self,))
+        check_for_filter_changes_thread.daemon = True
+        if not check_for_filter_changes_thread.is_alive():
+            check_for_filter_changes_thread.start()
+
+sniffer_manager = SnifferManager(Engine.queue_an_event)
