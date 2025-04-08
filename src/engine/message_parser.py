@@ -23,7 +23,7 @@ from src.models.messages.added_item import AddedItemMessage
 from src.models.messages.satanic_zone import SatanicZoneMessage
 
 from src.consts import events as consts
-from src.engine.backend import LOGIN_SERVERS, GAME_SERVERS
+from src.engine.backend import PROTOCOL_SIGNATURES
 
 
 _continuos_packets: dict[str, list[str]] = {}
@@ -32,28 +32,35 @@ _last_src_ack: dict[str, str] = {}
 
 class MessageParser:
     @staticmethod
-    def capture(message, src, dst)-> list | None:
+    def capture(message, src, dst) -> list | None:
+        """
+        Capture and parse game protocol messages
+        Args:
+            message: Raw message content
+            src: Source IP
+            dst: Destination IP
+        Returns:
+            Parsed message or None if invalid
+        """
         logger = logging.getLogger(LOGGING_NAME)
         try:
-            all_servers = list(LOGIN_SERVERS.values()) + list(GAME_SERVERS.values())
-            # Filter out packets from non-game servers
-            if src not in all_servers and dst not in all_servers:
-                return None
-            
+            # Check for JSON format packets
             match = re.search("{.+}", str(message))
             if match is None:
+                # Handle special format packets
                 if len(message) <= 100:
                     return None
-                
-                # Skip if first character is not 'x'
-                if message[0] != "x":
+
+                # Validate special format packet header
+                if message[0] != PROTOCOL_SIGNATURES["special_start"]:
                     return None
-                
+
                 # Skip first 3 characters as they are fixed prefix
                 truncated_message = message[3:]
                 result = None
                 try:
                     import base64
+
                     # Reserved for future use
                     if "[INV]" in truncated_message:
                         jwt_token = truncated_message.split("[INV]")[1]
@@ -67,25 +74,25 @@ class MessageParser:
                     else:
                         # Parse URL query string format
                         from urllib.parse import parse_qs
+
                         parsed = parse_qs(truncated_message)
                         # Convert list values to single values
-                        result = {k:v[0] for k,v in parsed.items()}
-
+                        result = {k: v[0] for k, v in parsed.items()}
+                    # logger.debug(f"MessageParser.capture: {result} from {src} to {dst}")
                     return result
                 except Exception as e:
                     logger.debug(f"Message parsing failed: {e}")
                     return None
-                
+
+            # Process JSON format packets
             msg = match.group(0)
             try:
                 parsed = json.loads(msg)
-                # Ignore useless packets
-                if 'inventory_charms' in parsed:
+                # Filter out excluded packet types
+                if any(key in parsed for key in PROTOCOL_SIGNATURES["excluded_keys"]):
                     return None
-                # logger.log(logging.DEBUG,f"MessageParser.capture: {parsed} from {src} to {dst}")
                 return parsed
-            except json.JSONDecodeError as e:
-                #logger.log(logging.DEBUG,f"MessageParser.capture.except: {msg}")
+            except json.JSONDecodeError:
                 return None
         except Exception as e:
             logger.error(f"Error in Capture function: {e}")
@@ -97,7 +104,7 @@ class MessageParser:
         try:
             if msg_list is None:
                 return None
-            events : list[BaseEvent] = []
+            events: list[BaseEvent] = []
             for msg_dict in msg_list:
                 try:
                     event_name = MessageParser.identify_event(msg_dict)
@@ -130,23 +137,23 @@ class MessageParser:
             # Skip non-dictionary messages (commonly from item list packets) to prevent type errors
             # Check if msg_dict is a dictionary type
             if not isinstance(msg_dict, dict):
-                # logger.debug(f"msg_dict is not a dictionary, got {type(msg_dict)}, {msg_dict}")
+                # logger.warning(f"msg_dict is not a dictionary, got {type(msg_dict)}, {msg_dict}")
                 return None
 
-            if 'steam' in msg_dict:
+            if "steam" in msg_dict:
                 return None
 
-            if 'currencyData' in msg_dict or 'currency_data' in msg_dict:
+            if "currencyData" in msg_dict or "currency_data" in msg_dict:
                 return consts.EvNameUpdateGold
-            elif 'totalGuildXp' in msg_dict:
+            elif "totalGuildXp" in msg_dict:
                 return consts.EvNameUpdateXP
-            elif 'mail' in msg_dict.get('message', ''):
+            elif "mail" in msg_dict.get("message", ""):
                 return consts.EvNameUpdateMail
-            elif 'addedItemObject' in msg_dict:
+            elif "addedItemObject" in msg_dict:
                 return consts.EvNameItemAdded
-            elif 'satanicZoneName' in msg_dict:
+            elif "satanicZoneName" in msg_dict:
                 return consts.EvNameUpdateSatanicZone
-            elif 'experience' in msg_dict:
+            elif "experience" in msg_dict:
                 return consts.EvNameUpdateAccount
             else:
                 return None
@@ -183,9 +190,11 @@ class MessageParser:
                 if packet_key != _last_src_ack[packet_src]:
                     load = "".join(_continuos_packets[_last_src_ack[packet_src]])
                     # logger.log(logging.DEBUG,f"MessageParser.packet_to_event: {load}")
-                    load = load.replace("'b'", '')
+                    load = load.replace("'b'", "")
                     for possible_msg in load.split("\\"):
-                        msg_list = MessageParser.capture(possible_msg, packet_src, packet[IP].dst)
+                        msg_list = MessageParser.capture(
+                            possible_msg, packet_src, packet[IP].dst
+                        )
                         if msg_list is not None:
                             result_messages.append(msg_list)
                     del _continuos_packets[_last_src_ack[packet_src]]

@@ -10,6 +10,7 @@ python = ">=3.11,<3.12"
 scapy = "^2.5.0"
 pyside6 = "^6.5.3"
 requests = "^2.31.0"
+psutil = "^7.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pyinstaller = "^6.1.0"
