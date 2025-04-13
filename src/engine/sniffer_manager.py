@@ -34,11 +34,14 @@ class SnifferManager():
             self.sniffer = ConnectionError.InterfaceNotFound
 
     def change_sniffer_filter(self,new_filter):
-        self.sniffer.stop()
-        self.filter = new_filter
-        self._create_sniffer()
-        self.logger.info(f"Sniffer-Filter changed to : {new_filter}")
-        self.sniffer.start()
+        if hasattr(self.sniffer,'stop_cb'):
+            self.sniffer.stop()
+            self.filter = new_filter
+            self._create_sniffer()
+            self.logger.info(f"Sniffer-Filter changed to : {new_filter}")
+            self.sniffer.start()
+        else:
+            self.logger.warning("Tried to stop sniffer too early after starting it.")
     
     def _start_filter_thread(self):
         check_for_filter_changes_thread = threading.Thread(target=sniffer_filter_thread.observe_changing_ips,args=(self,))
