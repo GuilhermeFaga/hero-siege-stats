@@ -16,6 +16,7 @@ class SnifferManager():
         self.filter = Backend.get_packet_filter()
         self.callback = packet_callback
         self._create_sniffer()
+        
         self._start_filter_thread()
 
     def _create_sniffer(self):
@@ -39,9 +40,14 @@ class SnifferManager():
         if hasattr(self.sniffer,'stop_cb'):
             self.sniffer.stop()
             self.filter = new_filter
+
+
+            from src.engine.message_parser import MessageParser
+            MessageParser.reset_packet_buffers()
+            
             self._create_sniffer()
             self.logger.info(f"Sniffer-Filter changed to : {new_filter}")
-            self.sniffer.start()
+            
         else:
             self.logger.warning("Tried to stop sniffer too early after starting it.")
     

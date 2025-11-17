@@ -139,7 +139,6 @@ class MessageParser:
             if not isinstance(msg_dict, dict):
                 # logger.warning(f"msg_dict is not a dictionary, got {type(msg_dict)}, {msg_dict}")
                 return None
-
             if "steam" in msg_dict:
                 return None
 
@@ -186,18 +185,21 @@ class MessageParser:
                     _continuos_packets[packet_key] = []
 
                 _continuos_packets[packet_key].append(str(packet.load))
-
                 if packet_key != _last_src_ack[packet_src]:
-                    load = "".join(_continuos_packets[_last_src_ack[packet_src]])
-                    # logger.log(logging.DEBUG,f"MessageParser.packet_to_event: {load}")
-                    load = load.replace("'b'", "")
-                    for possible_msg in load.split("\\"):
-                        msg_list = MessageParser.capture(
-                            possible_msg, packet_src, packet[IP].dst
-                        )
-                        if msg_list is not None:
-                            result_messages.append(msg_list)
-                    del _continuos_packets[_last_src_ack[packet_src]]
+                    old_key = _last_src_ack[packet_src]
+                    if old_key in _continuos_packets:
+                        load = "".join(_continuos_packets[_last_src_ack[packet_src]])
+
+                        load = load.replace("'b'", "")
+                        for possible_msg in load.split("\\"):
+                            msg_list = MessageParser.capture(
+                                possible_msg, packet_src, packet[IP].dst
+                            )
+                            if msg_list is not None:
+                                result_messages.append(msg_list)
+                        del _continuos_packets[_last_src_ack[packet_src]]
+                    else:
+                        logger.debug(f"Skipping missing packet buffer key: {old_key}")
 
                 _last_src_ack[packet_src] = packet_key
 
@@ -211,3 +213,9 @@ class MessageParser:
         except Exception as e:
             logger.error(f"Error converting packet to event: {e}")
             return None
+
+    @staticmethod
+    def reset_packet_buffers():
+        global _continuos_packets, _last_src_ack
+        _continuos_packets.clear()
+        _last_src_ack.clear()
