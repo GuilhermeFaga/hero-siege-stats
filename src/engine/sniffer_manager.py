@@ -16,17 +16,19 @@ class SnifferManager():
         self.filter = Backend.get_packet_filter()
         self.callback = packet_callback
         self._create_sniffer()
-        self.sniffer.start()
         self._start_filter_thread()
 
     def _create_sniffer(self):
         try:
+            if self.iface == ConnectionError.InterfaceNotFound:
+                raise Exception("No Interface found")
             self.sniffer = AsyncSniffer(
                 iface=self.iface,
                 filter=self.filter,
                 prn=self.callback,
                 store=False
             )
+            self.sniffer.start()
             self.logger.info(f"Sniffer started on interface: {self.iface}")
         except Exception as e:
             self.logger.error(f"Failed to initialize sniffer: {e}")

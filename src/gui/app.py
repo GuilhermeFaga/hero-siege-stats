@@ -11,7 +11,7 @@ from PySide6.QtGui import QIcon
 from scapy.sendrecv import AsyncSniffer
 
 
-from src.engine.sniffer_manager import sniffer_manager
+
 from src.gui.widgets.main import MainWidget
 
 from src.gui.messages.error import ErrorMessages
@@ -30,13 +30,15 @@ from src.utils.version import latest_version as get_latest_version
 from src.utils.icon_fix import icon_fix
 
 
-icon_fix()
 
 
 def run():
     logger = logging.getLogger(LOGGING_NAME)
     logger.log(logging.INFO,"Initializing...")
-
+    if not sys.platform.startswith('windows'):
+        logger.error(f"HSS only supports Windows OS")
+        sys.exit(-1)
+    icon_fix()
     WIDTH = 300
     HEIGHT = 0
 
@@ -67,17 +69,18 @@ def run():
     widget.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
 
     widget.show()
-
     current_version, latest_version = (
         get_current_version(), get_latest_version())
 
     if latest_version and current_version != latest_version:
         VersionMessages.outdated_version(widget)
-
+    from src.engine.sniffer_manager import sniffer_manager
     if isinstance(sniffer_manager.sniffer, ConnectionError):
         ErrorMessages.get_message(widget, sniffer_manager.sniffer)
         logger.log(logging.ERROR,"Connection error")
         logger.log(logging.INFO,sniffer_manager.sniffer)
+        logger.error(f"Aborting, check internet connection")
+        sys.exit(-1)
 
     try:
         sys.exit(app.exec())
