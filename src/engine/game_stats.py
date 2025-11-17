@@ -32,13 +32,15 @@ class GameStats:
     def process_event(self, event: BaseEvent):
         self.logger.log(logging.INFO,f"GameStats.process_event: {event}")
         if isinstance(event, GoldEvent):
-            self.gold.update(event.value)
+            self.gold.update(currencyData=event.value, season_mode=self.season_mode)
         if isinstance(event, XPEvent):
             self.xp.add(event.value)
         if isinstance(event, AccountEvent):
             self.xp.update(total_xp=event.value.experience)
+            self.season_mode = event.value.get_current_season_mode()
             # TODO - Find the correct fortune_enemies_killed value
-            self.fortune.update(total_fortune=event.value.fortune_enemies)
+            # TODO - Fortune Message changed and logic is not working anymore rightnow.
+            #self.fortune.update(total_fortune=event.value.fortune_enemies)
         if isinstance(event, MailEvent):
             self.session.update(has_mail=bool(event.value))
         if isinstance(event, AddedItemEvent):
@@ -56,6 +58,7 @@ class GameStats:
         self.xp = XPStats()
         self.added_items = AddedItemsStats()
         self.satanic_zone = SatanicZoneStats()
+        self.season_mode = None
         
         logger.info("All stats have been reset")
 

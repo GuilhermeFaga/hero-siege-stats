@@ -9,4 +9,4 @@ class GoldEvent(BaseEvent):
 
     def __init__(self, gold_message: GoldMessage):
         self.name = consts.EvNameUpdateGold
-        self.value = gold_message.currency_data
+        self.value = gold_message.currencyData
