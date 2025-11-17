@@ -35,9 +35,9 @@ from src.utils.icon_fix import icon_fix
 def run():
     logger = logging.getLogger(LOGGING_NAME)
     logger.log(logging.INFO,"Initializing...")
-    if not sys.platform.startswith('windows'):
+    if not sys.platform.startswith('win32'):
         logger.error(f"HSS only supports Windows OS")
-        sys.exit(-1)
+        #sys.exit(-1)
     icon_fix()
     WIDTH = 300
     HEIGHT = 0
