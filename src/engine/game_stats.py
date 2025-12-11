@@ -27,6 +27,7 @@ class GameStats:
     fortune = FortuneStats()
     added_items = AddedItemsStats()
     satanic_zone = SatanicZoneStats()
+    season_mode = None
     logger = logging.getLogger(LOGGING_NAME)
 
     def process_event(self, event: BaseEvent):
