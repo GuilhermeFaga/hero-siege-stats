@@ -16,17 +16,20 @@ class SnifferManager():
         self.filter = Backend.get_packet_filter()
         self.callback = packet_callback
         self._create_sniffer()
-        self.sniffer.start()
+        
         self._start_filter_thread()
 
     def _create_sniffer(self):
         try:
+            if self.iface == ConnectionError.InterfaceNotFound:
+                raise Exception("No Interface found")
             self.sniffer = AsyncSniffer(
                 iface=self.iface,
                 filter=self.filter,
                 prn=self.callback,
                 store=False
             )
+            self.sniffer.start()
             self.logger.info(f"Sniffer started on interface: {self.iface}")
         except Exception as e:
             self.logger.error(f"Failed to initialize sniffer: {e}")
@@ -34,11 +37,19 @@ class SnifferManager():
             self.sniffer = ConnectionError.InterfaceNotFound
 
     def change_sniffer_filter(self,new_filter):
-        self.sniffer.stop()
-        self.filter = new_filter
-        self._create_sniffer()
-        self.logger.info(f"Sniffer-Filter changed to : {new_filter}")
-        self.sniffer.start()
+        if hasattr(self.sniffer,'stop_cb'):
+            self.sniffer.stop()
+            self.filter = new_filter
+
+
+            from src.engine.message_parser import MessageParser
+            MessageParser.reset_packet_buffers()
+            
+            self._create_sniffer()
+            self.logger.info(f"Sniffer-Filter changed to : {new_filter}")
+            
+        else:
+            self.logger.warning("Tried to stop sniffer too early after starting it.")
     
     def _start_filter_thread(self):
         check_for_filter_changes_thread = threading.Thread(target=sniffer_filter_thread.observe_changing_ips,args=(self,))

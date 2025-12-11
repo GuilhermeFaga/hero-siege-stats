@@ -7,10 +7,9 @@ from scapy.interfaces import NetworkInterface
 
 from src.consts.enums import ConnectionError
 from src.consts.logger import LOGGING_NAME
+from src.consts.connectivity_test_hosts import CONNECTIVITY_HOSTS,CONNECTIVITY_TEST_PORT,CONNECTION_TIMEOUT
 
-CONNECTIVITY_TEST_HOST = "google.com"
-CONNECTIVITY_TEST_PORT = 80
-CONNECTION_TIMEOUT = 5
+
 
 # Game protocol signatures for packet filtering
 PROTOCOL_SIGNATURES = {
@@ -69,16 +68,20 @@ class Backend:
     @staticmethod
     def check_internet_connection() -> bool:
         logger = logging.getLogger(LOGGING_NAME)
-        try:
-            with socket.create_connection(
-                (CONNECTIVITY_TEST_HOST, CONNECTIVITY_TEST_PORT),
-                timeout=CONNECTION_TIMEOUT,
-            ) as s:
-                connection_iface_ip = s.getsockname()[0]
-                return connection_iface_ip
-        except (TimeoutError, socket.gaierror) as e:
-            logger.error(f"Internet connection check failed: {e}")
-            return None
+        for CONNECTIVITY_TEST_HOST in CONNECTIVITY_HOSTS:
+            try:
+                with socket.create_connection(
+                    (CONNECTIVITY_TEST_HOST, CONNECTIVITY_TEST_PORT),timeout=CONNECTION_TIMEOUT
+                ) as s:
+                    connection_iface_ip = s.getsockname()[0]
+                    return connection_iface_ip
+            except (TimeoutError, socket.gaierror) as e:
+                logger.info(f"Could not check connection to: {CONNECTIVITY_TEST_HOST}")
+                pass
+            except Exception as e:
+                logger.error(f"Unknown error: {e}")
+        logger.error(f"Internet connection check failed")
+        return None
 
     @staticmethod
     def get_connection_interface() -> str | ConnectionError:

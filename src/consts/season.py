@@ -1,0 +1,1 @@
+CURRENT_SEASON = 9
