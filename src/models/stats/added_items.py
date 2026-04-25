@@ -17,11 +17,13 @@ class AddedItemsStats:
 
     def update(self, added_item_object: AddedItemObject | None = None, items_per_hour: dict | None = None):
         if added_item_object is not None:
-            self.added_items[ItemsRarity[str(added_item_object.rarity)]
-                             ]['total'] += 1
+            rarity = ItemsRarity.get(str(added_item_object.rarity), str(added_item_object.rarity).title())
+            if rarity not in self.added_items:
+                return
+
+            self.added_items[rarity]['total'] += 1
             if added_item_object.mf_drop == 1:
-                self.added_items[ItemsRarity[str(
-                    added_item_object.rarity)]]['mf'] += 1
+                self.added_items[rarity]['mf'] += 1
 
         if items_per_hour is not None:
             self.items_per_hour = items_per_hour

@@ -1,4 +1,5 @@
 import logging
+import re
 import socket
 import psutil
 
@@ -19,22 +20,60 @@ PROTOCOL_SIGNATURES = {
     "excluded_keys": ["inventory_charms", "steam"],  # Keys to exclude
 }
 
+GAME_PROCESS_NAMES = {
+    "herosiegeexe",
+    "herosiege",
+}
+
+PCAP_IF_UP = 0x00000002
+
+
+def _normalize_process_name(name: str | None) -> str:
+    return re.sub(r"[^a-z0-9]", "", (name or "").lower())
+
+
+def _interface_flags_indicate_up(flags) -> bool:
+    if isinstance(flags, int):
+        # Older WinPcap/Npcap can report 0; newer libpcap uses PCAP_IF_UP.
+        return flags == 0 or bool(flags & PCAP_IF_UP)
+
+    flags_text = str(flags).upper()
+    return not flags_text or any(
+        flag in flags_text for flag in ("OK", "UP", "RUNNING")
+    )
+
+
+def _is_usable_interface(iface: NetworkInterface) -> bool:
+    return bool(getattr(iface, "ip", "")) and _interface_flags_indicate_up(
+        getattr(iface, "flags", "")
+    )
+
+
+def _is_virtual_interface(iface: NetworkInterface) -> bool:
+    description = getattr(iface, "description", "") or ""
+    return "Virtual" in description or "Hyper-V" in description
+
 
 class Backend:
 
     @staticmethod
     def get_open_connections_from_process() -> set:
-        pid: int = 0
+        pids: set[int] = set()
         hs_ips = set()
         for proccess in psutil.process_iter(["pid", "name"]):
-            if proccess.info["name"] == "Hero_Siege.exe":
-                pid = proccess.info["pid"]
+            process_name = _normalize_process_name(proccess.info.get("name"))
+            if process_name in GAME_PROCESS_NAMES or process_name.startswith(
+                "herosiege"
+            ):
+                pids.add(proccess.info["pid"])
 
-        if pid != 0:
+        if pids:
             connections = psutil.net_connections(kind="inet")
             for connection in connections:
-                if connection.pid == pid:
-                    hs_ips.add(connection.raddr.ip)
+                if connection.pid in pids:
+                    remote_ip = getattr(connection.raddr, "ip", None)
+                    if remote_ip:
+                        hs_ips.add(remote_ip)
         return hs_ips
 
     @staticmethod
@@ -56,7 +95,7 @@ class Backend:
         if not hs_ips:
             ip_filter_string = "len < 0"
         else:
-            ip_filter_string = f"(host {' or host '.join(hs_ips)}) and len > 30"
+            ip_filter_string = f"(host {' or host '.join(sorted(hs_ips))}) and len > 30"
         # following filter line commented out because there seems to be a flaw because no package is actually getting through
         # return f"({base_filter}) and ({json_filter} or {special_filter})"
         return ip_filter_string
@@ -94,12 +133,7 @@ class Backend:
         interfaces = Backend.get_interfaces()
 
         def is_valid_physical_interface(iface: NetworkInterface) -> bool:
-            return (
-                "OK" in iface.flags
-                and iface.ip
-                and "Virtual" not in iface.description
-                and "Hyper-V" not in iface.description
-            )
+            return _is_usable_interface(iface) and not _is_virtual_interface(iface)
 
         # Try to find matching physical interface
         for interface in interfaces:
@@ -122,7 +156,7 @@ class Backend:
 
         # Fallback to any working interface
         for interface in interfaces:
-            if "OK" in interface.flags and interface.ip:
+            if _is_usable_interface(interface):
                 logger.warning(
                     f"Falling back to available interface: {interface.description}"
                 )
