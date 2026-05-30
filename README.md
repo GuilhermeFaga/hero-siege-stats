@@ -59,13 +59,17 @@ This is a simple tool that tracks the requests made between the game and the ser
 ### Requirements
 
 - [Python 3.11](https://www.python.org/downloads/release/python-3116/)
-- [Poetry](https://python-poetry.org/)
+- [uv](https://docs.astral.sh/uv/)
 
 ### Steps
 
 1. Clone the repository
-2. Run `poetry install`
-3. Run `poetry run python hero-siege-stats.py`
+2. Run `uv sync --dev`
+3. Run `uv run python hero-siege-stats.py`
+
+## Formatting
+
+Run `uv run ruff format .`
 
 ## Building from source
 
@@ -76,8 +80,8 @@ Same as running from source.
 ### Steps
 
 1. Clone the repository
-2. Run `poetry install`
-3. Run `poetry run py build.py`
+2. Run `uv sync --dev`
+3. Run `uv run python build.py`
 4. The executable will be in the `dist` folder
 
 ## Contributors

@@ -1,20 +1,32 @@
-[tool.poetry]
+[project]
 name = "hero-siege-stats"
 version = "0.1.0"
 description = ""
-authors = ["Guilherme Faga <firiguito@gmail.com>"]
 readme = "README.md"
+requires-python = ">=3.11,<3.12"
+authors = [
+    { name = "Guilherme Faga", email = "firiguito@gmail.com" },
+]
+dependencies = [
+    "psutil>=7.0.0,<8.0.0",
+    "pyside6>=6.5.3,<7.0.0",
+    "requests>=2.31.0,<3.0.0",
+    "scapy>=2.5.0,<3.0.0",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<3.12"
-scapy = "^2.5.0"
-pyside6 = "^6.5.3"
-requests = "^2.31.0"
-psutil = "^7.0.0"
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.1.0,<7.0.0",
+    "ruff>=0.11.0,<1.0.0",
+]
 
-[tool.poetry.group.dev.dependencies]
-pyinstaller = "^6.1.0"
+[tool.uv]
+package = false
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
