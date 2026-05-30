@@ -1,3 +1,5 @@
+import sys
+
 from PySide6.QtWidgets import QMessageBox
 from PySide6.QtGui import QFont
 
@@ -5,14 +7,12 @@ from src.consts.enums import ConnectionError
 
 
 class ErrorMessages:
-
     @staticmethod
     def message_box(parent) -> QMessageBox:
         msg = QMessageBox(parent)
         msg.setIcon(QMessageBox.Icon.Critical)
 
-        msg.setStyleSheet("""QLabel {font-family: %s;}""" %
-                          (QFont().defaultFamily()))
+        msg.setStyleSheet("""QLabel {font-family: %s;}""" % (QFont().defaultFamily()))
 
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
 
@@ -22,8 +22,7 @@ class ErrorMessages:
     def no_interface(parent):
         msg = ErrorMessages.message_box(parent)
         msg.setWindowTitle("Unable to connect to the internet!")
-        msg.setText(
-            "Make sure that you are connected to the internet.")
+        msg.setText("Make sure that you are connected to the internet.")
 
         msg.show()
 
@@ -31,8 +30,7 @@ class ErrorMessages:
     def server_not_responding(parent):
         msg = ErrorMessages.message_box(parent)
         msg.setWindowTitle("Unable to connect to the game server!")
-        msg.setText(
-            "It appears that the game's server is offline.")
+        msg.setText("It appears that the game's server is offline.")
 
         msg.show()
 
@@ -40,11 +38,19 @@ class ErrorMessages:
     def interface_missing(parent):
         msg = ErrorMessages.message_box(parent)
         msg.setWindowTitle("Unable to get network interface!")
-        msg.setText(
-            "On windows make sure that WinPcap is installed in your system.")
-        msg.setInformativeText("WinPcap can be installed from <a href='{}'>here</a> <br>\
-            <b>Make sure to install with the \"Install Npcap in WinPcap API-compatible Mode\"<b> option."
-                               .format('https://npcap.com/dist/npcap-1.77.exe'))
+        if sys.platform.startswith("win32"):
+            msg.setText("Make sure that Npcap is installed in your system.")
+            msg.setInformativeText(
+                "Npcap can be installed from <a href='{}'>here</a> <br>\
+                <b>Make sure to install with the \"Install Npcap in WinPcap API-compatible Mode\"<b> option.".format(
+                    "https://npcap.com/dist/npcap-1.77.exe"
+                )
+            )
+        else:
+            msg.setText("Packet capture could not be started on this system.")
+            msg.setInformativeText(
+                "On Linux, run with sufficient packet capture permissions, for example as root or with capture capabilities configured."
+            )
 
         msg.show()
 

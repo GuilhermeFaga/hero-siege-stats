@@ -11,7 +11,6 @@ from PySide6.QtGui import QIcon
 from scapy.sendrecv import AsyncSniffer
 
 
-
 from src.gui.widgets.main import MainWidget
 
 from src.gui.messages.error import ErrorMessages
@@ -30,22 +29,19 @@ from src.utils.version import latest_version as get_latest_version
 from src.utils.icon_fix import icon_fix
 
 
-
-
 def run():
     logger = logging.getLogger(LOGGING_NAME)
-    logger.log(logging.INFO,"Initializing...")
-    if not sys.platform.startswith('win32'):
-        logger.error(f"HSS only supports Windows OS")
-        #sys.exit(-1)
+    logger.log(logging.INFO, "Initializing...")
+    if not sys.platform.startswith("win32"):
+        logger.info("Running on a non-Windows platform")
     icon_fix()
     WIDTH = 300
     HEIGHT = 0
 
     app = QApplication(sys.argv)
 
-    QFontDatabase.addApplicationFont(assets.font('cookierunbold.ttf'))
-    QFontDatabase.addApplicationFont(assets.font('otsutomefont.ttf'))
+    QFontDatabase.addApplicationFont(assets.font("cookierunbold.ttf"))
+    QFontDatabase.addApplicationFont(assets.font("otsutomefont.ttf"))
 
     app.setStyleSheet(style)
     app.setStyle("fusion")
@@ -69,32 +65,36 @@ def run():
     widget.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
 
     widget.show()
-    current_version, latest_version = (
-        get_current_version(), get_latest_version())
+    current_version, latest_version = (get_current_version(), get_latest_version())
 
     if latest_version and current_version != latest_version:
         VersionMessages.outdated_version(widget)
     from src.engine.sniffer_manager import sniffer_manager
+
     if isinstance(sniffer_manager.sniffer, ConnectionError):
         ErrorMessages.get_message(widget, sniffer_manager.sniffer)
-        logger.log(logging.ERROR,"Connection error")
-        logger.log(logging.INFO,sniffer_manager.sniffer)
-        logger.error(f"Aborting, check internet connection")
-        sys.exit(-1)
+        logger.log(logging.WARNING, "Sniffer unavailable; UI will stay open")
+        logger.log(logging.INFO, sniffer_manager.sniffer)
 
+    exit_code = 0
     try:
-        sys.exit(app.exec())
-    except SystemExit as e:
-        logger.log(logging.INFO, f"Application exited with code: {e.code}")
+        exit_code = app.exec()
     except KeyboardInterrupt:
         logger.log(logging.INFO, "Application terminated by user (KeyboardInterrupt)")
     except RuntimeError as e:
         logger.log(logging.ERROR, f"Qt runtime error: {str(e)}")
+        exit_code = 1
     except Exception as e:
         logger.log(logging.ERROR, f"Unexpected error: {str(e)}")
+        exit_code = 1
     finally:
-        logger.log(logging.INFO,"Exiting...")
+        logger.log(logging.INFO, "Exiting...")
         if isinstance(sniffer_manager.sniffer, AsyncSniffer):
-            if sniffer_manager.sniffer.running:
-                sniffer_manager.sniffer.stop()
-        logger.log(logging.INFO,"Exited")
+            try:
+                if sniffer_manager.sniffer.running:
+                    sniffer_manager.sniffer.stop()
+            except Exception as e:
+                logger.log(logging.WARNING, f"Failed to stop sniffer cleanly: {e}")
+        logger.log(logging.INFO, "Exited")
+
+    return exit_code
