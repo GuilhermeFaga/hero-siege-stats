@@ -94,15 +94,6 @@ class Backend:
         Generate BPF filter based on protocol signatures
         Returns: BPF filter string
         """
-        # Filter for TCP packets with minimum length
-        base_filter = f"tcp and len > {PROTOCOL_SIGNATURES['min_length']}"
-
-        # Filter for JSON format packets (starting with '{')
-        json_filter = f"tcp[((tcp[12:1] & 0xf0) >> 2):1] = 0x{ord(PROTOCOL_SIGNATURES['json_start']):02x}"
-
-        # Filter for special format packets (starting with 'x')
-        special_filter = f"tcp[((tcp[12:1] & 0xf0) >> 2):1] = 0x{ord(PROTOCOL_SIGNATURES['special_start']):02x}"
-
         hs_ips = Backend.get_open_connections_from_process()
         if not hs_ips:
             ip_filter_string = "len < 0"
@@ -127,12 +118,12 @@ class Backend:
                 ) as s:
                     connection_iface_ip = s.getsockname()[0]
                     return connection_iface_ip
-            except (TimeoutError, socket.gaierror) as e:
+            except (TimeoutError, socket.gaierror):
                 logger.info(f"Could not check connection to: {CONNECTIVITY_TEST_HOST}")
                 pass
             except Exception as e:
                 logger.error(f"Unknown error: {e}")
-        logger.error(f"Internet connection check failed")
+        logger.error("Internet connection check failed")
         return None
 
     @staticmethod

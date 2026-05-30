@@ -21,8 +21,8 @@ def latest_version():
         if req.status_code == 200:
             logger.log(logging.INFO, os.path.basename(req.url))
             return os.path.basename(req.url)
-    except Exception as e:
-        logger.error(f"Could not fetch latest_version starting without version check")
+    except Exception:
+        logger.error("Could not fetch latest_version starting without version check")
         pass
     return None
 

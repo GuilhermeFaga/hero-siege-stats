@@ -1,6 +1,3 @@
-from math import ceil, floor
-
-
 class FortuneStats:
     total_fortune: int
     total_fortune_kills: int

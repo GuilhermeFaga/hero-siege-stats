@@ -169,7 +169,7 @@ class MessageParser:
 
             try:
                 packet.load
-            except:
+            except AttributeError:
                 return None
 
             msg_list = None

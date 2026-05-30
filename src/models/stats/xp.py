@@ -1,6 +1,3 @@
-from math import ceil, floor
-
-
 class XPStats:
     total_xp: int
     total_xp_earned: int

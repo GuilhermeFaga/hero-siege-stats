@@ -4,10 +4,9 @@ from src.consts.sets import ItemsRarity
 
 
 class AddedItemsStats:
-    added_items = {}
-    items_per_hour = {}
-
     def __init__(self):
+        self.added_items = {}
+        self.items_per_hour = {}
         for rarity_id in ItemsRarity:
             self.added_items[ItemsRarity[rarity_id]] = {"mf": 0, "total": 0}
             self.items_per_hour[ItemsRarity[rarity_id]] = 0

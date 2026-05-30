@@ -8,7 +8,7 @@ class MailEvent(BaseEvent):
     value: int
 
     def __init__(self, mail_message: MailMessage):
-        self.name = consts.EvNameUpdateXP
+        self.name = consts.EvNameUpdateMail
         self.value = mail_message.new_mail
 
     @staticmethod
