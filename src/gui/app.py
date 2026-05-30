@@ -25,6 +25,7 @@ from src.consts.logger import LOGGING_NAME
 from src.utils import assets
 
 from src.utils.version import current_version as get_current_version
+from src.utils.version import is_release_version
 from src.utils.version import latest_version as get_latest_version
 from src.utils.icon_fix import icon_fix
 
@@ -67,7 +68,7 @@ def run():
     widget.show()
     current_version, latest_version = (get_current_version(), get_latest_version())
 
-    if latest_version and current_version != latest_version:
+    if is_release_version(current_version) and latest_version != current_version:
         VersionMessages.outdated_version(widget)
     from src.engine.sniffer_manager import sniffer_manager
 
