@@ -20,6 +20,7 @@ from src.models.messages.xp import XPMessage
 from src.models.messages.account import AccountMessage
 from src.models.messages.mail import MailMessage
 from src.models.messages.added_item import AddedItemMessage
+from src.models.messages.base import get_message_field, has_message_field
 from src.models.messages.satanic_zone import SatanicZoneMessage
 
 from src.consts import events as consts
@@ -29,8 +30,65 @@ from src.engine.backend import PROTOCOL_SIGNATURES
 _continuos_packets: dict[str, list[str]] = {}
 _last_src_ack: dict[str, str] = {}
 
+GOLD_FIELDS = ("currencyData", "currency_data")
+XP_TOTAL_FIELDS = (
+    "totalGuildXp",
+    "total_guild_xp",
+    "totalGuildExp",
+    "total_guild_exp",
+)
+XP_GAIN_FIELDS = ("xp", "experienceGained", "experience_gained")
+MAIL_FIELDS = ("newMail", "new_mail", "mail")
+ITEM_WRAPPER_FIELDS = (
+    "addedItemObject",
+    "added_item_object",
+)
+ITEM_SIGNATURE_FIELDS = (
+    "seed",
+    "a",
+    "itemId",
+    "item_id",
+    "gid",
+)
+ITEM_RARITY_FIELDS = ("rarity", "itemRarity", "item_rarity", "d")
+SATANIC_ZONE_FIELDS = (
+    "satanicZoneName",
+    "satanic_zone_name",
+)
+ACCOUNT_SIGNATURE_FIELDS = (
+    "name",
+    "class",
+    "class_id",
+    "heroLevel",
+    "herolevel",
+    "season",
+    "hardcore",
+)
+
 
 class MessageParser:
+    @staticmethod
+    def _iter_message_dicts(value):
+        if isinstance(value, dict):
+            yield value
+            return
+
+        if isinstance(value, list):
+            for item in value:
+                yield from MessageParser._iter_message_dicts(item)
+
+    @staticmethod
+    def _is_item_payload(msg_dict: dict) -> bool:
+        operations = get_message_field(msg_dict, "operations", default={})
+        return (
+            has_message_field(msg_dict, *ITEM_WRAPPER_FIELDS)
+            or (
+                has_message_field(msg_dict, *ITEM_RARITY_FIELDS)
+                and has_message_field(msg_dict, *ITEM_SIGNATURE_FIELDS)
+            )
+            or has_message_field(operations, "add")
+        )
+
     @staticmethod
     def capture(message, src, dst) -> list | None:
         """
@@ -45,7 +103,7 @@ class MessageParser:
         logger = logging.getLogger(LOGGING_NAME)
         try:
             # Check for JSON format packets
-            match = re.search("{.+}", str(message))
+            match = re.search(r"(\{.+\}|\[.+\])", str(message))
             if match is None:
                 # Handle special format packets
                 if len(message) <= 100:
@@ -105,7 +163,7 @@ class MessageParser:
             if msg_list is None:
                 return None
             events: list[BaseEvent] = []
-            for msg_dict in msg_list:
+            for msg_dict in MessageParser._iter_message_dicts(msg_list):
                 try:
                     event_name = MessageParser.identify_event(msg_dict)
                     if event_name is None:
@@ -119,7 +177,12 @@ class MessageParser:
                     if event_name == consts.EvNameUpdateMail:
                         events.append(MailEvent(MailMessage(msg_dict)))
                     if event_name == consts.EvNameItemAdded:
-                        events.append(AddedItemEvent(AddedItemMessage(msg_dict)))
+                        events.extend(
+                            AddedItemEvent(added_item_message)
+                            for added_item_message in AddedItemMessage.from_msg_dict(
+                                msg_dict
+                            )
+                        )
                     if event_name == consts.EvNameUpdateSatanicZone:
                         events.append(SatanicZoneEvent(SatanicZoneMessage(msg_dict)))
                 except Exception as e:
@@ -142,18 +205,24 @@ class MessageParser:
             if "steam" in msg_dict:
                 return None
 
-            if "currencyData" in msg_dict or "currency_data" in msg_dict:
+            message = str(get_message_field(msg_dict, "message", default="")).lower()
+
+            if has_message_field(msg_dict, *GOLD_FIELDS):
                 return consts.EvNameUpdateGold
-            elif "totalGuildXp" in msg_dict:
+            elif has_message_field(msg_dict, *XP_TOTAL_FIELDS):
                 return consts.EvNameUpdateXP
-            elif "mail" in msg_dict.get("message", ""):
+            elif "mail" in message or has_message_field(msg_dict, *MAIL_FIELDS):
                 return consts.EvNameUpdateMail
-            elif "addedItemObject" in msg_dict:
+            elif MessageParser._is_item_payload(msg_dict):
                 return consts.EvNameItemAdded
-            elif "satanicZoneName" in msg_dict:
+            elif has_message_field(msg_dict, *SATANIC_ZONE_FIELDS):
                 return consts.EvNameUpdateSatanicZone
-            elif "experience" in msg_dict:
+            elif has_message_field(msg_dict, "experience") and has_message_field(
+                msg_dict, *ACCOUNT_SIGNATURE_FIELDS
+            ):
                 return consts.EvNameUpdateAccount
+            elif has_message_field(msg_dict, *XP_GAIN_FIELDS):
+                return consts.EvNameUpdateXP
             else:
                 return None
         except Exception as e:
