@@ -21,19 +21,22 @@ from src.consts.enums import Sizes
 
 class SessionRow(Row):
     def __init__(self):
-        self.session_duration = ValueDisplay(
-            icon=assets_const.IcTime, value=str(0))
+        self.session_duration = ValueDisplay(icon=assets_const.IcTime, value=str(0))
         self.mail = ValueDisplay(
-            icon=assets_const.IcMailOff, value=str(0), size=Sizes.Medium)
+            icon=assets_const.IcMailOff, value=str(0), size=Sizes.Medium
+        )
 
         self.reset_button = Button("Reset Stats", size=Sizes.Medium)
         self.reset_button.onclick(self._handle_reset)
 
-        Row.__init__(self, [
-            self.session_duration,
-            self.mail,
-            self.reset_button,
-        ])
+        Row.__init__(
+            self,
+            [
+                self.session_duration,
+                self.mail,
+                self.reset_button,
+            ],
+        )
 
     def _handle_reset(self):
         Engine.reset_stats()
@@ -43,20 +46,23 @@ class SessionRow(Row):
     def update_session(self, session: Session):
         self.session_duration.setValue(session.get_duration_str())
         self.mail.setIcon(
-            assets_const.IcMailOn if session.has_mail else assets_const.IcMailOff)
+            assets_const.IcMailOn if session.has_mail else assets_const.IcMailOff
+        )
         self.mail.setValue("Mail!" if session.has_mail else "No mail")
+
 
 class SatanicZoneRow(Row):
     def __init__(self):
         self.satanic_zone_buffs = SatanicZoneDisplay()
-        self.satanic_zone_name = ValueDisplay(value="Satanic_Zone",size=Sizes.XL)
-        Row.__init__(self,[self.satanic_zone_buffs,self.satanic_zone_name])
+        self.satanic_zone_name = ValueDisplay(value="Satanic_Zone", size=Sizes.XL)
+        Row.__init__(self, [self.satanic_zone_buffs, self.satanic_zone_name])
 
-    def update_satanic(self, satanic_zone:SatanicZoneStats):
+    def update_satanic(self, satanic_zone: SatanicZoneStats):
         self.satanic_zone_buffs.set_satanic_zone_info(satanic_zone.satanic_zone_info)
         self.satanic_zone_buffs.set_buff_icons_and_tooltip()
         if satanic_zone.satanic_zone_info is not None:
             self.satanic_zone_name.setValue(satanic_zone.satanic_zone_info.satanic_zone)
+
 
 class GoldRow(Row):
     def __init__(self):
@@ -64,11 +70,9 @@ class GoldRow(Row):
         self.total_gold_earned = ValueDisplay(value=str(0), size=Sizes.Medium)
         self.gold_per_hour = ValueDisplay(value=str(0), size=Sizes.Medium)
 
-        Row.__init__(self, [
-            self.total_gold,
-            self.total_gold_earned,
-            self.gold_per_hour
-        ])
+        Row.__init__(
+            self, [self.total_gold, self.total_gold_earned, self.gold_per_hour]
+        )
 
     def update_gold(self, gold_stats: GoldStats):
         self.total_gold.setValue(f"{gold_stats.total_gold:,}")
@@ -82,11 +86,9 @@ class XPRow(Row):
         self.total_xp_earned = ValueDisplay(value=str(0), size=Sizes.Medium)
         self.total_xp_per_hour = ValueDisplay(value=str(0), size=Sizes.Medium)
 
-        Row.__init__(self, [
-            self.total_xp,
-            self.total_xp_earned,
-            self.total_xp_per_hour
-        ])
+        Row.__init__(
+            self, [self.total_xp, self.total_xp_earned, self.total_xp_per_hour]
+        )
 
     def update_xp(self, xp_stats: XPStats):
         self.total_xp.setValue(f"{xp_stats.total_xp:,}")
@@ -96,26 +98,30 @@ class XPRow(Row):
 
 class AddedItemsRow(Row):
     def __init__(self):
-        self.total_angelic = ValueDisplay(
-            icon=assets_const.IcChest, value=str(0))
+        self.total_angelic = ValueDisplay(icon=assets_const.IcChest, value=str(0))
         self.total_heroic = ValueDisplay(value=str(0), size=Sizes.Medium)
         self.total_satanic = ValueDisplay(value=str(0), size=Sizes.Medium)
 
-        Row.__init__(self, [
-            self.total_angelic,
-            self.total_heroic,
-            self.total_satanic
-        ])
+        Row.__init__(self, [self.total_angelic, self.total_heroic, self.total_satanic])
 
     def update_added_item(self, added_items_stats: AddedItemsStats):
-        angelic_and_unholy_total = added_items_stats.added_items['Angelic']['total'] + added_items_stats.added_items['Unholy']['total']
-        angelic_and_unholy_mf = added_items_stats.added_items['Angelic']['mf'] + added_items_stats.added_items['Unholy']['mf']
+        angelic_and_unholy_total = (
+            added_items_stats.added_items["Angelic"]["total"]
+            + added_items_stats.added_items["Unholy"]["total"]
+        )
+        angelic_and_unholy_mf = (
+            added_items_stats.added_items["Angelic"]["mf"]
+            + added_items_stats.added_items["Unholy"]["mf"]
+        )
         self.total_angelic.setValue(
-            f"{assets_const.FcAngelic}{angelic_and_unholy_total:,} {assets_const.FcBlue}({angelic_and_unholy_mf:,})")
+            f"{assets_const.FcAngelic}{angelic_and_unholy_total:,} {assets_const.FcBlue}({angelic_and_unholy_mf:,})"
+        )
         self.total_heroic.setValue(
-            f"{assets_const.FcHeroic}{added_items_stats.added_items['Heroic']['total']:,} {assets_const.FcBlue}({added_items_stats.added_items['Heroic']['mf']:,}) {assets_const.FcDefault}| {assets_const.FcHeroic}{added_items_stats.items_per_hour['Heroic']:,}/h")
+            f"{assets_const.FcHeroic}{added_items_stats.added_items['Heroic']['total']:,} {assets_const.FcBlue}({added_items_stats.added_items['Heroic']['mf']:,}) {assets_const.FcDefault}| {assets_const.FcHeroic}{added_items_stats.items_per_hour['Heroic']:,}/h"
+        )
         self.total_satanic.setValue(
-            f"{assets_const.FcSatanic}{added_items_stats.added_items['Satanic']['total']:,} {assets_const.FcBlue}({added_items_stats.added_items['Satanic']['mf']:,}) {assets_const.FcDefault}| {assets_const.FcSatanic}{added_items_stats.items_per_hour['Satanic']:,}/h")
+            f"{assets_const.FcSatanic}{added_items_stats.added_items['Satanic']['total']:,} {assets_const.FcBlue}({added_items_stats.added_items['Satanic']['mf']:,}) {assets_const.FcDefault}| {assets_const.FcSatanic}{added_items_stats.items_per_hour['Satanic']:,}/h"
+        )
 
 
 class StatsLayout(QWidget):
@@ -146,7 +152,6 @@ class StatsLayout(QWidget):
         self.xp_row.update_xp(stats.xp)
         self.added_items_row.update_added_item(stats.added_items)
         self.satanic_zone_row.update_satanic(stats.satanic_zone)
-
 
     def refresh(self):
         stats = Engine.get_stats()

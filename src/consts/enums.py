@@ -8,7 +8,7 @@ class ConnectionError(Enum):
 
 
 class Sizes(Enum):
-    Small = 'sm'
-    Medium = 'md'
-    Large = 'lg'
-    XL = 'xl'
+    Small = "sm"
+    Medium = "md"
+    Large = "lg"
+    XL = "xl"

@@ -11,4 +11,4 @@ class XPMessage(BaseMessage):
         super().__init__(msg_dict)
         match = re.search(r"\d+", self.message)
         self.xp = int(match.group(0)) if match is not None else 0
-        self.totalGuildXp = msg_dict['totalGuildXp']
+        self.totalGuildXp = msg_dict["totalGuildXp"]

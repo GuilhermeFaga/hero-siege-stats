@@ -12,7 +12,14 @@ class Stats:
     added_items: AddedItemsStats
     satanic_zone: SatanicZoneStats
 
-    def __init__(self, session=Session(), gold_stats=GoldStats(), xp_stats=XPStats(), added_items=AddedItemsStats(),satanic_zone=SatanicZoneStats()):
+    def __init__(
+        self,
+        session=Session(),
+        gold_stats=GoldStats(),
+        xp_stats=XPStats(),
+        added_items=AddedItemsStats(),
+        satanic_zone=SatanicZoneStats(),
+    ):
         self.session = session
         self.gold = gold_stats
         self.xp = xp_stats

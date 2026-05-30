@@ -6,6 +6,7 @@ from src.consts import events as consts
 
 class SatanicZoneEvent(BaseEvent):
     value: SzInfo
+
     def __init__(self, satanic_zone_message: SatanicZoneMessage):
         self.name = consts.EvNameUpdateSatanicZone
         self.value = satanic_zone_message.satanic_info

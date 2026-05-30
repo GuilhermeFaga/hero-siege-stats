@@ -1,4 +1,3 @@
-
 class Account:
     account_id: str = ""
 

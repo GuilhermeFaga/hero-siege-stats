@@ -1,4 +1,3 @@
-
 font_size = 14
 
 style = """

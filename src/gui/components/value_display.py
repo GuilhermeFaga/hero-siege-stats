@@ -52,7 +52,7 @@ display_bg = {
     Sizes.Small: small_bg,
     Sizes.Medium: normal_bg,
     Sizes.Large: large_bg,
-    Sizes.XL: xl_bg
+    Sizes.XL: xl_bg,
 }
 
 
@@ -60,7 +60,12 @@ class GroupBox(QFrame):
     icon: ImageWidget
     label: QLabel
 
-    def __init__(self, icon: str | None = None, value: str | None = None, size: Sizes = Sizes.Large):
+    def __init__(
+        self,
+        icon: str | None = None,
+        value: str | None = None,
+        size: Sizes = Sizes.Large,
+    ):
         QFrame.__init__(self)
 
         self.setObjectName("GroupBox")
@@ -83,7 +88,8 @@ class GroupBox(QFrame):
             self.label.setText(value)
 
         self.label.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
 
         layout.addWidget(self.label)
 
@@ -91,7 +97,12 @@ class GroupBox(QFrame):
 class ValueDisplay(QWidget):
     groupBox: GroupBox
 
-    def __init__(self, icon: str | None = None, value: str | None = None, size: Sizes = Sizes.Large):
+    def __init__(
+        self,
+        icon: str | None = None,
+        value: str | None = None,
+        size: Sizes = Sizes.Large,
+    ):
         QWidget.__init__(self)
 
         layout = QHBoxLayout(self)

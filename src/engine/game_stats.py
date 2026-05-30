@@ -31,7 +31,7 @@ class GameStats:
     logger = logging.getLogger(LOGGING_NAME)
 
     def process_event(self, event: BaseEvent):
-        self.logger.log(logging.INFO,f"GameStats.process_event: {event}")
+        self.logger.log(logging.INFO, f"GameStats.process_event: {event}")
         if isinstance(event, GoldEvent):
             self.gold.update(currencyData=event.value, season_mode=self.season_mode)
         if isinstance(event, XPEvent):
@@ -41,7 +41,7 @@ class GameStats:
             self.season_mode = event.value.get_current_season_mode()
             # TODO - Find the correct fortune_enemies_killed value
             # TODO - Fortune Message changed and logic is not working anymore rightnow.
-            #self.fortune.update(total_fortune=event.value.fortune_enemies)
+            # self.fortune.update(total_fortune=event.value.fortune_enemies)
         if isinstance(event, MailEvent):
             self.session.update(has_mail=bool(event.value))
         if isinstance(event, AddedItemEvent):
@@ -52,7 +52,7 @@ class GameStats:
     def reset(self):
         logger = logging.getLogger(LOGGING_NAME)
         logger.info("Resetting all game stats...")
-        
+
         self.session = Session()
         self.account = Account()
         self.gold = GoldStats()
@@ -60,7 +60,7 @@ class GameStats:
         self.added_items = AddedItemsStats()
         self.satanic_zone = SatanicZoneStats()
         self.season_mode = None
-        
+
         logger.info("All stats have been reset")
 
     def update_hourly_stats(self):
@@ -70,14 +70,14 @@ class GameStats:
             )
         )
         self.xp.update(
-            xp_per_hour=self.session.calculate_value_per_hour(
-                self.xp.total_xp_earned
-            )
+            xp_per_hour=self.session.calculate_value_per_hour(self.xp.total_xp_earned)
         )
         _items_per_hour = {}
         for rarity_id in ItemsRarity:
-            _items_per_hour[ItemsRarity[rarity_id]] = self.session.calculate_value_per_hour(
-                self.added_items.added_items[ItemsRarity[rarity_id]]['total']
+            _items_per_hour[ItemsRarity[rarity_id]] = (
+                self.session.calculate_value_per_hour(
+                    self.added_items.added_items[ItemsRarity[rarity_id]]["total"]
+                )
             )
         self.added_items.update(items_per_hour=_items_per_hour)
 
@@ -88,5 +88,5 @@ class GameStats:
             gold_stats=self.gold,
             xp_stats=self.xp,
             added_items=self.added_items,
-            satanic_zone = self.satanic_zone
+            satanic_zone=self.satanic_zone,
         )

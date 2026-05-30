@@ -1,5 +1,3 @@
-
-
 from src.engine.message_parser import MessageParser
 from src.engine.game_stats import GameStats
 
@@ -21,5 +19,3 @@ class Engine:
     @staticmethod
     def reset_stats():
         Engine.game_stats.reset()
-
-

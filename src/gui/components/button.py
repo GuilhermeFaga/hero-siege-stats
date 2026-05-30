@@ -8,6 +8,7 @@ button_width = {
     Sizes.XL: 212,
 }
 
+
 class Button(QWidget):
     button: QPushButton
 
@@ -41,4 +42,4 @@ class Button(QWidget):
 
     def onclick(self, callback):
         """Connect click event to callback"""
-        self.button.clicked.connect(callback) 
+        self.button.clicked.connect(callback)

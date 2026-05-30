@@ -43,23 +43,23 @@ IcBuff_15: str = "sz_buff_mf.png"
 IcBuff_16: str = "sz_buff_mf.png"
 IcBuff_17: str = "sz_buff_combat_training.png"
 IcBuff_18: str = "sz_buff_combat_training.png"
-IcBuff_19: str = "sz_buff_combat_training.png"  
+IcBuff_19: str = "sz_buff_combat_training.png"
 IcBuff_20: str = "sz_buff_clairvoyance.png"
 IcBuff_21: str = "sz_buff_aftermath.png"
 IcBuff_22: str = "sz_buff_deep_cuts.png"
 IcBuff_23: str = "sz_buff_ancient_pack.png"
 IcBuff_24: str = "sz_buff_ancient_pack_2.png"
-IcBuff_25: str = "sz_buff_ancient_pack_2.png" #not sure if it exists havent seen it and dont know if it has a different icon like the first and second level of the acient pack buff
+IcBuff_25: str = "sz_buff_ancient_pack_2.png"  # not sure if it exists havent seen it and dont know if it has a different icon like the first and second level of the acient pack buff
+
 
 # retrieve buff icon path object helper function
 def get_buff_icon(name):
     return globals()[name]
 
+
 # Font Colors
-FcDefault: str = "<font color=\"#C3AF75\">"
-FcAngelic: str = "<font color=\"#F6F794\">"
-FcHeroic: str = "<font color=\"#00FFAE\">"
-FcSatanic: str = "<font color=\"#CA1717\">"
-FcBlue: str = "<font color=\"#5050AE\">"
-
-
+FcDefault: str = '<font color="#C3AF75">'
+FcAngelic: str = '<font color="#F6F794">'
+FcHeroic: str = '<font color="#00FFAE">'
+FcSatanic: str = '<font color="#CA1717">'
+FcBlue: str = '<font color="#5050AE">'
